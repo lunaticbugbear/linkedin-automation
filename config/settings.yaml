@@ -18,7 +18,7 @@ github:
   create_new_repo_per_project: true
   repo_visibility: "public"
   repo_prefix: "project"
-  token: "${GITHUB_TOKEN}"
+  token: "${GH_TOKEN}"
 
 linkedin:
   manual_post: true

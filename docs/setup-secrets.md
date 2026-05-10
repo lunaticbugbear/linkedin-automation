@@ -7,7 +7,7 @@ Configure these repository secrets before running the LinkedIn Automation workfl
 | Secret | Purpose |
 |---|---|
 | `ANTHROPIC_API_KEY` | Claude API key for project generation |
-| `GITHUB_TOKEN` | GitHub token with repo creation permission |
+| `GH_TOKEN` | GitHub token with repo creation permission |
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token from @BotFather |
 | `TELEGRAM_CHAT_ID` | Telegram chat ID to receive notifications |
 | `EMAIL_TO` | Email address to receive notifications |
@@ -39,7 +39,7 @@ Configure these repository secrets before running the LinkedIn Automation workfl
 | Problem | Likely Cause | Fix |
 |---|---|---|
 | Claude API failure | Missing or invalid `ANTHROPIC_API_KEY` | Recreate the secret and confirm the API key is active |
-| GitHub repo creation failure | `GITHUB_TOKEN` lacks repo creation permission | Use a token with repository creation permissions |
+| GitHub repo creation failure | `GH_TOKEN` lacks repo creation permission | Use a token with repository creation permissions |
 | Telegram notification failure | Wrong bot token or chat ID | Confirm `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` |
 | Email notification failure | SMTP password is invalid or blocked | Use an app password and confirm SMTP access is enabled |
 | Cron not running | GitHub Actions schedule delay or disabled workflow | Check the Actions tab and run the workflow manually first |
