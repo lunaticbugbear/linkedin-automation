@@ -34,7 +34,7 @@ Build an automated system that generates LinkedIn-ready project content every 2 
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    GitHub Actions (Cron)                            │
-│  Schedule: Every 2 days at 02:00 UTC (09:00 WIB/GMT+7)            │
+│  Schedule: Every 2 days at 02:30 UTC (09:30 WIB/GMT+7)            │
 │  Steps:                                                             │
 │  1. Generate 3 project ideas using AI                               │
 │  2. Create draft LinkedIn posts for each                            │
@@ -114,7 +114,7 @@ project-name-YYYYMMDD/
 cycle:
   interval: "every-2-days"
   start_date: "2026-05-10"
-  time: "02:00"  # UTC time (09:00 WIB/GMT+7)
+  time: "02:30"  # UTC time (09:30 WIB/GMT+7)
 
 notifications:
   email:
@@ -260,7 +260,7 @@ For each project:
 
 ```
 Today: 2026-05-10
-Time: 02:00 UTC (09:00 WIB)
+Time: 02:30 UTC (09:30 WIB)
 Action: First project generation cycle
 ```
 
