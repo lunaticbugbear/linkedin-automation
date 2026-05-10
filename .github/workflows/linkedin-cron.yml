@@ -33,7 +33,7 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
-          python scripts/main.py
+          python -m scripts.main
 
       - name: Upload logs
         if: always()
