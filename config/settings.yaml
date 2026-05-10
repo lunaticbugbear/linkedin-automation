@@ -1,0 +1,30 @@
+cycle:
+  interval: "every-2-days"
+  start_date: "2026-05-10"
+  time: "02:30"  # UTC (09:30 WIB)
+
+notifications:
+  email:
+    enabled: true
+    provider: "smtp"
+    from: "linkedin-automation@example.com"
+    to: "${EMAIL_TO}"
+  telegram:
+    enabled: true
+    bot_token: "${TELEGRAM_BOT_TOKEN}"
+    chat_id: "${TELEGRAM_CHAT_ID}"
+
+github:
+  create_new_repo_per_project: true
+  repo_visibility: "public"
+  repo_prefix: "project"
+  token: "${GITHUB_TOKEN}"
+
+linkedin:
+  manual_post: true
+  hashtags: ["#ITSupport", "#Linux", "#Automation", "#DevOps", "#Cloud", "#JobSearch"]
+
+ai:
+  model: "claude-sonnet-4-6"
+  max_projects: 3
+  tone: "professional-mix"
