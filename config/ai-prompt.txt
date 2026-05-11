@@ -23,17 +23,17 @@ Rules:
 - Do NOT repeat the same domain two cycles in a row
 - Each project must be buildable in 1-4 hours
 - Mix quick wins (1 hour) and deep dives (3-4 hours)
+- The LinkedIn post should be professional, practical, and easy to copy-paste manually
+- Do not include Markdown code fences in the output
 
 For each project, output:
-- Title (catchy but professional)
-- Description (1-2 sentences)
-- Tech stack (specific tools, languages, commands)
-- GitHub repo name (kebab-case, descriptive)
-- LinkedIn post draft (mix of technical + storytelling style):
-  - Hook (relatable problem or surprising insight)
-  - Technical details (what you built and how)
-  - Result/impact (what it solves)
-  - Call to action
-  - Hashtags
+- title: catchy but professional
+- description: 1-2 sentence summary
+- function: what the project does in practical terms
+- use_case: why it is useful for IT support, operations, or job search credibility
+- tech_stack: specific tools, languages, commands
+- repo_name: kebab-case, descriptive
+- linkedin_post: full LinkedIn post draft with hook, technical details, result/impact, call to action, and hashtags
+- key_features: list of 2-3 short features for the visual banner
 
-Output format: JSON with keys: title, description, tech_stack, repo_name, linkedin_post
+Output format: JSON array only. Each item must use keys: title, description, function, use_case, tech_stack, repo_name, linkedin_post, key_features

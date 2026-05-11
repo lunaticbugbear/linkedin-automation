@@ -1,18 +1,14 @@
 cycle:
   interval: "every-2-days"
   start_date: "2026-05-10"
-  time: "02:30"  # UTC (09:30 WIB)
+  time: "02:00"  # UTC (09:00 WIB)
 
 notifications:
-  email:
-    enabled: true
-    provider: "smtp"
-    from: "linkedin-automation@example.com"
-    to: "${EMAIL_TO}"
   telegram:
     enabled: true
     bot_token: "${TELEGRAM_BOT_TOKEN}"
     chat_id: "${TELEGRAM_CHAT_ID}"
+    selection_timeout_seconds: 1800
 
 github:
   create_new_repo_per_project: true
@@ -22,6 +18,7 @@ github:
 
 linkedin:
   manual_post: true
+  visual_output_dir: "outputs"
   hashtags: ["#ITSupport", "#Linux", "#Automation", "#DevOps", "#Cloud", "#JobSearch"]
 
 ai:

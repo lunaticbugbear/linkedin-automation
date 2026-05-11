@@ -2,8 +2,8 @@ name: LinkedIn Automation
 
 on:
   schedule:
-    # Every 2 days at 02:30 UTC (09:30 WIB)
-    - cron: '30 2 */2 * *'
+    # Every 2 days at 02:00 UTC (09:00 WIB)
+    - cron: '0 2 */2 * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -22,6 +22,7 @@ jobs:
           python --version
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+          python -m playwright install chromium
 
       - name: Run LinkedIn automation cycle
         env:
@@ -31,14 +32,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
           python -m scripts.main
 
-      - name: Upload logs
+      - name: Upload outputs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: automation-logs
-          path: logs/
+          name: automation-outputs
+          path: outputs/
