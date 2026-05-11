@@ -9,6 +9,9 @@ on:
 jobs:
   generate-and-notify:
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: cmd
 
     steps:
       - name: Checkout code
