@@ -25,6 +25,10 @@ Rules:
 - Mix quick wins (1 hour) and deep dives (3-4 hours)
 - The LinkedIn post should be professional, practical, and easy to copy-paste manually
 - Do not include Markdown code fences in the output
+- Favor ideas that can become a working CLI or web app MVP quickly
+- If the idea is a dashboard, tracker, or visualizer, make it demo-friendly for a web app
+- If the idea is operational or command-line focused, make it a CLI MVP
+- Keep the MVP scope small enough to validate in automation
 
 For each project, output:
 - title: catchy but professional

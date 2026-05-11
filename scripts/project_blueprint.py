@@ -13,6 +13,7 @@ def build_blueprint(idea: dict, project_type: str) -> dict:
         "main_command": "health-snapshot" if project_type == "cli-python" else "",
         "mvp_goal": idea.get("description", ""),
         "features": [idea.get("function", "")],
+        "source_idea": idea,
         "files_to_generate": files,
         "validation_commands": validation_commands,
     }

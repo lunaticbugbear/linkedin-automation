@@ -34,6 +34,12 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python -m scripts.main
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automation-outputs
+          path: outputs/
 
       - name: Upload outputs
         if: always()
