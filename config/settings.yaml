@@ -21,9 +21,6 @@ linkedin:
   visual_output_dir: "outputs"
   hashtags: ["#ITSupport", "#Linux", "#Automation", "#DevOps", "#Cloud", "#JobSearch"]
 
-github:
-  token: "${GH_TOKEN}"
-
 ai:
   provider: "9router"
   base_url: "${AI_BASE_URL}"

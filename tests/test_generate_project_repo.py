@@ -1,5 +1,5 @@
-from unittest.mock import patch, MagicMock
-from scripts.generate_project_repo import create_github_repo, format_repo_name, build_generation_report
+from unittest.mock import patch
+from scripts.generate_project_repo import create_github_repo, format_repo_name, build_generation_report, push_directory_to_repo
 
 
 def test_format_repo_name():
@@ -32,3 +32,12 @@ def test_build_generation_report():
     )
     assert "Server Health Snapshot" in report
     assert "cli-python" in report
+
+
+def test_push_directory_to_repo_calls_helpers(tmp_path):
+    (tmp_path / "README.md").write_text("hello")
+    with patch("scripts.generate_project_repo.push_file_to_repo") as mock_push:
+        mock_push.return_value = True
+        result = push_directory_to_repo(tmp_path, "example-repo", "token")
+        assert result is True
+        assert mock_push.called

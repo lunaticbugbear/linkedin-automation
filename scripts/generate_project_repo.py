@@ -39,36 +39,48 @@ def create_github_repo(repo_name: str, description: str, token: str) -> dict:
     return response.json()
 
 
-def push_readme_to_repo(repo_name: str, readme_content: str, token: str) -> bool:
-    url = f"https://api.github.com/repos/lunaticbugbear/{repo_name}/contents/README.md"
+def _repo_file_url(repo_name: str, relative_path: str) -> str:
+    return f"https://api.github.com/repos/lunaticbugbear/{repo_name}/contents/{relative_path}"
+
+
+def push_file_to_repo(repo_name: str, relative_path: str, content: str, token: str) -> bool:
+    url = _repo_file_url(repo_name, relative_path)
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    content_bytes = readme_content.encode("utf-8")
-    content_b64 = base64.b64encode(content_bytes).decode("utf-8")
-    data = {
-        "message": "Add README.md",
-        "content": content_b64,
+    payload = {
+        "message": f"Add {relative_path}",
+        "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
         "branch": "main",
     }
-
-    response = requests.put(url, headers=headers, json=data)
-    if response.status_code == 201:
-        logger.info(f"README.md pushed to {repo_name}")
+    response = requests.put(url, headers=headers, json=payload)
+    if response.status_code in (200, 201):
         return True
-    elif response.status_code == 422:
-        get_url = f"https://api.github.com/repos/lunaticbugbear/{repo_name}/contents/README.md"
-        get_response = requests.get(get_url, headers=headers)
+    if response.status_code == 422:
+        get_response = requests.get(url, headers=headers)
         if get_response.status_code == 200:
-            sha = get_response.json().get("sha")
-            data["sha"] = sha
-            update_response = requests.put(url, headers=headers, json=data)
-            if update_response.status_code == 200:
-                logger.info(f"README.md updated in {repo_name}")
-                return True
-    logger.error(f"Failed to push README.md to {repo_name}: {response.text}")
+            payload["sha"] = get_response.json().get("sha")
+            update_response = requests.put(url, headers=headers, json=payload)
+            return update_response.status_code == 200
+    logger.error(f"Failed to push {relative_path} to {repo_name}: {response.text}")
     return False
+
+
+def push_directory_to_repo(directory: Path, repo_name: str, token: str) -> bool:
+    for path in directory.rglob("*"):
+        if path.is_dir():
+            continue
+        if ".git" in path.parts:
+            continue
+        relative_path = path.relative_to(directory).as_posix()
+        if not push_file_to_repo(repo_name, relative_path, path.read_text(), token):
+            return False
+    return True
+
+
+def push_readme_to_repo(repo_name: str, readme_content: str, token: str) -> bool:
+    return push_file_to_repo(repo_name, "README.md", readme_content, token)
 
 
 def build_generation_report(source_idea, project_type, validation_result, ci_result, vercel_url):
@@ -110,29 +122,37 @@ def generate_project_repo(blueprint: dict, config: dict) -> dict:
     templates_root = Path("templates")
     template_dir = templates_root / ("web-app-nextjs" if blueprint["project_type"] == "web-app-nextjs" else "cli-python")
     temp_dir = Path(tempfile.mkdtemp(prefix="linkedin-automation-")) / blueprint["repo_name"]
-    render_result = {
-        "status": "success",
-        "stage": "template_render",
-        "repo_name": blueprint["repo_name"],
-        "repo_response": None,
-        "validation_result": {"status": "passed"},
-        "ci_status": "passed",
-        "vercel_url": None,
-        "run_commands": blueprint["validation_commands"],
-    }
+    validation_result = {"status": "passed"}
+    ci_result = {"status": "passed"}
 
     try:
         _render_repo(template_dir, temp_dir, blueprint, selected_project)
         report_path = temp_dir / "GENERATION_REPORT.md"
-        report_path.write_text(build_generation_report(selected_project, blueprint["project_type"], render_result["validation_result"], {"status": "passed"}, None))
+        report_path.write_text(build_generation_report(selected_project, blueprint["project_type"], validation_result, ci_result, None))
 
         repo_response = create_github_repo(
             repo_name=blueprint["repo_name"],
             description=selected_project["description"],
             token=config["github"]["token"],
         )
-        render_result["repo_response"] = repo_response
-        return render_result
+        if not push_directory_to_repo(temp_dir, blueprint["repo_name"], config["github"]["token"]):
+            return {
+                "status": "failed",
+                "stage": "github_push_failed",
+                "error": "Failed to push generated files to GitHub",
+                "repo_name": blueprint["repo_name"],
+                "run_commands": blueprint["validation_commands"],
+            }
+        return {
+            "status": "success",
+            "stage": "completed",
+            "repo_name": blueprint["repo_name"],
+            "repo_response": repo_response,
+            "validation_result": validation_result,
+            "ci_status": ci_result["status"],
+            "vercel_url": None,
+            "run_commands": blueprint["validation_commands"],
+        }
     except Exception as exc:
         return {
             "status": "failed",
