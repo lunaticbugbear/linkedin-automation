@@ -89,4 +89,11 @@ def test_send_final_project_sends_text_and_photo():
         assert result is True
         assert mock_post.call_count == 2
         assert "sendMessage" in mock_post.call_args_list[0].args[0]
+        payload = mock_post.call_args_list[0].kwargs["json"]
+        assert payload["reply_markup"]["inline_keyboard"] == [
+            [
+                {"text": "Regenerate Post", "callback_data": "regenerate_post"},
+                {"text": "Selesai", "callback_data": "done"},
+            ]
+        ]
         assert "sendPhoto" in mock_post.call_args_list[1].args[0]

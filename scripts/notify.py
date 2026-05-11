@@ -117,7 +117,26 @@ def send_final_project(project: dict, image_path: str, bot_token: str, chat_id: 
         "<b>--- LinkedIn Post ---</b>\n"
         f"{html.escape(project['linkedin_post'])}"
     )
-    text_ok = send_telegram_notification(message, bot_token, chat_id)
+    response = requests.post(
+        _telegram_url(bot_token, "sendMessage"),
+        json={
+            "chat_id": chat_id,
+            "text": message,
+            "parse_mode": "HTML",
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {"text": "Regenerate Post", "callback_data": "regenerate_post"},
+                        {"text": "Selesai", "callback_data": "done"},
+                    ]
+                ]
+            },
+        },
+        timeout=30,
+    )
+    if response.status_code != 200:
+        logger.error(f"Telegram final message error: {response.text}")
+        return False
 
     with open(image_path, "rb") as image_file:
         response = requests.post(
@@ -130,4 +149,4 @@ def send_final_project(project: dict, image_path: str, bot_token: str, chat_id: 
     if response.status_code != 200:
         logger.error(f"Telegram photo error: {response.text}")
         return False
-    return text_ok
+    return True
