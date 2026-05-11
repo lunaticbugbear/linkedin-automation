@@ -12,8 +12,6 @@ Configure these repository secrets before running the LinkedIn Automation workfl
 | `GH_TOKEN` | GitHub token with repo creation permission |
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token from @BotFather |
 | `TELEGRAM_CHAT_ID` | Telegram chat ID to receive notifications |
-| `EMAIL_TO` | Email address to receive notifications |
-| `SMTP_PASSWORD` | SMTP password or app password for email notifications |
 
 ## Add Secrets in GitHub
 
@@ -32,11 +30,11 @@ Configure these repository secrets before running the LinkedIn Automation workfl
 3. Go to the repository **Actions** tab.
 4. Select the **LinkedIn Automation** workflow.
 5. Click **Run workflow**.
-6. Wait for the workflow to complete.
-7. Verify 3 new GitHub repositories are created.
-8. Verify Telegram notification arrives.
-9. Verify email notification arrives.
-10. Open the generated repositories and copy the approved LinkedIn post manually.
+6. Wait for the workflow to send 3 project options to Telegram.
+7. Choose one project with the inline buttons.
+8. Verify the selected repo is created.
+9. Verify Telegram receives the repo URL, LinkedIn post, and banner image.
+10. Use the LinkedIn post text manually in your profile.
 
 ## Troubleshooting
 
@@ -45,5 +43,4 @@ Configure these repository secrets before running the LinkedIn Automation workfl
 | AI generation failure | 9Router is not running, tunnel is inactive, or `AI_API_KEY`/`AI_MODEL` is wrong | Start 9Router, confirm the tunnel URL works, and verify the AI secrets |
 | GitHub repo creation failure | `GH_TOKEN` lacks repo creation permission | Use a token with repository creation permissions |
 | Telegram notification failure | Wrong bot token or chat ID | Confirm `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` |
-| Email notification failure | SMTP password is invalid or blocked | Use an app password and confirm SMTP access is enabled |
 | Cron not running | GitHub Actions schedule delay or disabled workflow | Check the Actions tab and run the workflow manually first |

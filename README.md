@@ -18,12 +18,12 @@ Automated LinkedIn project generation every 2 days.
 - `GH_TOKEN` (for creating repos)
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
-- `EMAIL_TO`
-- `SMTP_PASSWORD` (for email)
+
+The automation is Telegram-only. Email notifications are no longer used.
 
 ## Scheduled Run
 
-- Main automation: every 2 days at 09:30 WIB / 02:30 UTC.
-- Telegram reminder: every 2 days at 09:20 WIB / 02:20 UTC.
+- Main automation: every 2 days at 09:00 WIB / 02:00 UTC.
+- Telegram reminder: every 2 days at 08:50 WIB / 01:50 UTC.
 
 Before the scheduled run, keep your laptop on, start 9Router, and confirm the tunnel is active.
