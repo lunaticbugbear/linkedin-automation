@@ -8,7 +8,7 @@ on:
 
 jobs:
   generate-and-notify:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -26,7 +26,7 @@ jobs:
 
       - name: Run LinkedIn automation cycle
         env:
-          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_BASE_URL: http://127.0.0.1:20128/v1
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           AI_MODEL: ${{ secrets.AI_MODEL }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
