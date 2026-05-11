@@ -67,7 +67,12 @@ def wait_for_project_selection(bot_token: str, chat_id: str, message_id: int, ti
         if offset is not None:
             params["offset"] = offset
 
-        response = requests.get(_telegram_url(bot_token, "getUpdates"), params=params, timeout=15)
+        try:
+            response = requests.get(_telegram_url(bot_token, "getUpdates"), params=params, timeout=15)
+        except requests.exceptions.ConnectionError as e:
+            logger.warning(f"Telegram connection reset, retrying: {e}")
+            time.sleep(3)
+            continue
         if response.status_code != 200:
             logger.error(f"Telegram polling error: {response.text}")
             time.sleep(3)
