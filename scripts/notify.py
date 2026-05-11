@@ -1,93 +1,125 @@
+import html
+import time
+from typing import Optional
 import requests
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from scripts.utils import load_config, setup_logging
+from scripts.utils import setup_logging
 
 logger = setup_logging()
 
 
+def _telegram_url(bot_token: str, method: str) -> str:
+    return f"https://api.telegram.org/bot{bot_token}/{method}"
+
+
 def send_telegram_notification(message: str, bot_token: str, chat_id: str) -> bool:
-    """Send notification via Telegram."""
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    data = {
-        "chat_id": chat_id,
-        "text": message,
-        "parse_mode": "HTML"
-    }
-
-    try:
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
-            logger.info("Telegram notification sent")
-            return True
-        else:
-            logger.error(f"Telegram error: {response.text}")
-            return False
-    except Exception as e:
-        logger.error(f"Telegram exception: {e}")
-        return False
-
-
-def send_email_notification(subject: str, body: str, to_email: str, smtp_password: str) -> bool:
-    """Send notification via email."""
-    try:
-        msg = MIMEMultipart()
-        msg['From'] = "linkedin-automation@example.com"
-        msg['To'] = to_email
-        msg['Subject'] = subject
-
-        msg.attach(MIMEText(body, 'html'))
-
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login("linkedin-automation@example.com", smtp_password)
-        server.send_message(msg)
-        server.quit()
-
-        logger.info("Email notification sent")
+    response = requests.post(
+        _telegram_url(bot_token, "sendMessage"),
+        json={"chat_id": chat_id, "text": message, "parse_mode": "HTML"},
+        timeout=30,
+    )
+    if response.status_code == 200:
+        logger.info("Telegram notification sent")
         return True
-    except Exception as e:
-        logger.error(f"Email exception: {e}")
+    logger.error(f"Telegram error: {response.text}")
+    return False
+
+
+def send_project_options(ideas: list, bot_token: str, chat_id: str) -> int:
+    lines = ["<b>Pilih project LinkedIn hari ini:</b>\n"]
+    for index, idea in enumerate(ideas, 1):
+        lines.append(f"{index}. <b>{html.escape(idea['title'])}</b>")
+        lines.append(f"   Fungsi: {html.escape(idea['function'])}")
+        lines.append(f"   Kegunaan: {html.escape(idea['use_case'])}\n")
+
+    response = requests.post(
+        _telegram_url(bot_token, "sendMessage"),
+        json={
+            "chat_id": chat_id,
+            "text": "\n".join(lines),
+            "parse_mode": "HTML",
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {"text": "Pilih 1", "callback_data": "project:0"},
+                        {"text": "Pilih 2", "callback_data": "project:1"},
+                        {"text": "Pilih 3", "callback_data": "project:2"},
+                    ]
+                ]
+            },
+        },
+        timeout=30,
+    )
+    if response.status_code != 200:
+        logger.error(f"Telegram options error: {response.text}")
+        raise RuntimeError(f"Telegram options error: {response.status_code}")
+    return response.json()["result"]["message_id"]
+
+
+def wait_for_project_selection(bot_token: str, chat_id: str, message_id: int, timeout_seconds: int) -> Optional[dict]:
+    deadline = time.monotonic() + timeout_seconds
+    offset = None
+
+    while time.monotonic() < deadline:
+        params = {"timeout": 10}
+        if offset is not None:
+            params["offset"] = offset
+
+        response = requests.get(_telegram_url(bot_token, "getUpdates"), params=params, timeout=15)
+        if response.status_code != 200:
+            logger.error(f"Telegram polling error: {response.text}")
+            time.sleep(3)
+            continue
+
+        for update in response.json().get("result", []):
+            offset = update["update_id"] + 1
+            callback = update.get("callback_query")
+            if not callback:
+                continue
+
+            message = callback.get("message", {})
+            selected_chat_id = str(message.get("chat", {}).get("id"))
+            selected_message_id = message.get("message_id")
+            data = callback.get("data", "")
+
+            if selected_chat_id == str(chat_id) and selected_message_id == message_id and data.startswith("project:"):
+                return {
+                    "index": int(data.split(":", 1)[1]),
+                    "callback_query_id": callback["id"],
+                }
+
+    return None
+
+
+def answer_callback_query(bot_token: str, callback_query_id: str, text: str) -> bool:
+    response = requests.post(
+        _telegram_url(bot_token, "answerCallbackQuery"),
+        json={"callback_query_id": callback_query_id, "text": text},
+        timeout=30,
+    )
+    if response.status_code == 200:
+        return True
+    logger.error(f"Telegram callback answer error: {response.text}")
+    return False
+
+
+def send_final_project(project: dict, image_path: str, bot_token: str, chat_id: str) -> bool:
+    message = (
+        "<b>Project dibuat!</b>\n\n"
+        f"Repo: {html.escape(project['repo_url'])}\n\n"
+        "<b>--- LinkedIn Post ---</b>\n"
+        f"{html.escape(project['linkedin_post'])}"
+    )
+    text_ok = send_telegram_notification(message, bot_token, chat_id)
+
+    with open(image_path, "rb") as image_file:
+        response = requests.post(
+            _telegram_url(bot_token, "sendPhoto"),
+            data={"chat_id": chat_id},
+            files={"photo": image_file},
+            timeout=60,
+        )
+
+    if response.status_code != 200:
+        logger.error(f"Telegram photo error: {response.text}")
         return False
-
-
-def send_notifications(projects: list, config: dict) -> None:
-    """Send notifications for generated projects."""
-    if not projects:
-        logger.warning("No projects to notify about")
-        return
-
-    # Format message
-    message_lines = ["<b>3 New LinkedIn Projects Ready!</b>\n"]
-    for i, project in enumerate(projects, 1):
-        message_lines.append(f"{i}. <b>{project['title']}</b>")
-        message_lines.append(f"   Repo: {project.get('repo_url', 'N/A')}")
-
-    message = "\n".join(message_lines)
-
-    # Send Telegram
-    if config["notifications"]["telegram"]["enabled"]:
-        send_telegram_notification(
-            message=message,
-            bot_token=config["notifications"]["telegram"]["bot_token"],
-            chat_id=config["notifications"]["telegram"]["chat_id"]
-        )
-
-    # Send Email
-    if config["notifications"]["email"]["enabled"]:
-        send_email_notification(
-            subject="3 New LinkedIn Projects Ready for Review",
-            body=message,
-            to_email=config["notifications"]["email"]["to"],
-            smtp_password=config["notifications"]["email"].get("password", "")
-        )
-
-
-if __name__ == "__main__":
-    config = load_config("config/settings.yaml")
-    projects = [
-        {"title": "Test Project 1", "repo_url": "https://github.com/user/repo1"},
-        {"title": "Test Project 2", "repo_url": "https://github.com/user/repo2"},
-    ]
-    send_notifications(projects, config)
+    return text_ok
