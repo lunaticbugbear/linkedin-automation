@@ -24,12 +24,13 @@ def test_send_project_options_sends_inline_keyboard():
 
         assert message_id == 123
         payload = mock_post.call_args.kwargs["json"]
-        assert payload["reply_markup"]["inline_keyboard"] == [
-            [
-                {"text": "Pilih 1", "callback_data": "project:0"},
-                {"text": "Pilih 2", "callback_data": "project:1"},
-                {"text": "Pilih 3", "callback_data": "project:2"},
-            ]
+        assert payload["reply_markup"]["inline_keyboard"][0] == [
+            {"text": "Pilih 1", "callback_data": "project:0"},
+            {"text": "Pilih 2", "callback_data": "project:1"},
+            {"text": "Pilih 3", "callback_data": "project:2"},
+        ]
+        assert payload["reply_markup"]["inline_keyboard"][1] == [
+            {"text": "Ganti Semua", "callback_data": "regenerate_all"},
         ]
         assert "SLA Radar" in payload["text"]
         assert "Fungsi: Tracks SLA risk" in payload["text"]

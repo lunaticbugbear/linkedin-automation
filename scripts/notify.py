@@ -43,6 +43,9 @@ def send_project_options(ideas: list, bot_token: str, chat_id: str) -> int:
                         {"text": "Pilih 1", "callback_data": "project:0"},
                         {"text": "Pilih 2", "callback_data": "project:1"},
                         {"text": "Pilih 3", "callback_data": "project:2"},
+                    ],
+                    [
+                        {"text": "Ganti Semua", "callback_data": "regenerate_all"},
                     ]
                 ]
             },
