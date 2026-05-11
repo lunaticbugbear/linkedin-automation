@@ -4,6 +4,8 @@ from scripts.notify import (
     wait_for_project_selection,
     answer_callback_query,
     send_final_project,
+    format_success_message,
+    format_failure_message,
 )
 
 
@@ -72,11 +74,30 @@ def test_answer_callback_query_calls_telegram_api():
         assert "answerCallbackQuery" in mock_post.call_args.args[0]
 
 
+def test_success_and_failure_message_formatting():
+    success = format_success_message(
+        repo_url="https://github.com/example/project",
+        project_type="web-app-nextjs",
+        ci_status="passed",
+        vercel_url="https://example.vercel.app",
+        run_commands=["npm install", "npm run build"],
+        linkedin_post="Built this today.",
+    )
+    failure = format_failure_message({"stage": "build_failed", "error": "boom", "log_url": "https://logs"})
+    assert "Project ready" in success
+    assert "https://example.vercel.app" in success
+    assert "build_failed" in failure
+
+
 def test_send_final_project_sends_text_and_photo():
     project = {
         "title": "SLA Radar",
         "repo_url": "https://github.com/example/project-sla-radar",
         "linkedin_post": "Built an SLA radar today.",
+        "project_type": "cli-python",
+        "ci_status": "passed",
+        "run_commands": ["python -m pytest"],
+        "vercel_url": None,
     }
 
     with patch("scripts.notify.requests.post") as mock_post, patch("builtins.open", create=True):

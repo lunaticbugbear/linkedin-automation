@@ -28,9 +28,9 @@ def _ideas():
 
 @patch("scripts.main.send_final_project")
 @patch("scripts.main.generate_project_banner")
-@patch("scripts.main.format_linkedin_post")
-@patch("scripts.main.create_github_repo")
-@patch("scripts.main.format_repo_name")
+@patch("scripts.main.generate_project_repo")
+@patch("scripts.main.build_blueprint")
+@patch("scripts.main.classify_project_type")
 @patch("scripts.main.answer_callback_query")
 @patch("scripts.main.wait_for_project_selection")
 @patch("scripts.main.send_project_options")
@@ -42,9 +42,9 @@ def test_run_cycle_creates_only_selected_project(
     mock_send_options,
     mock_wait_selection,
     mock_answer_callback,
-    mock_format_repo_name,
-    mock_create_repo,
-    mock_format_post,
+    mock_classify,
+    mock_blueprint,
+    mock_generate_repo,
     mock_generate_banner,
     mock_send_final,
 ):
@@ -52,21 +52,24 @@ def test_run_cycle_creates_only_selected_project(
     mock_generate_ideas.return_value = _ideas()
     mock_send_options.return_value = 123
     mock_wait_selection.return_value = {"index": 1, "callback_query_id": "cb1"}
-    mock_format_repo_name.return_value = "project-linux-pulse-20260511"
-    mock_create_repo.return_value = {"html_url": "https://github.com/example/project-linux-pulse"}
-    mock_format_post.return_value = "Formatted Post 2"
+    mock_classify.return_value = "cli-python"
+    mock_blueprint.return_value = {"repo_name": "project-linux-pulse-20260511", "project_type": "cli-python", "validation_commands": ["python -m pytest"], "source_idea": _ideas()[1]}
+    mock_generate_repo.return_value = {
+        "status": "success",
+        "repo_name": "project-linux-pulse-20260511",
+        "repo_response": {"html_url": "https://github.com/example/project-linux-pulse"},
+        "ci_status": "passed",
+        "vercel_url": None,
+        "validation_result": {"status": "passed"},
+        "run_commands": ["python -m pytest"],
+    }
     mock_generate_banner.return_value = "outputs/linux-pulse-banner.png"
 
     result = run_cycle()
 
     assert result["title"] == "Linux Pulse"
     assert result["repo_url"] == "https://github.com/example/project-linux-pulse"
-    mock_create_repo.assert_called_once()
-    mock_create_repo.assert_called_once_with(
-        repo_name="project-linux-pulse-20260511",
-        description="Desc 2",
-        token="gh",
-    )
+    mock_generate_repo.assert_called_once()
     mock_send_final.assert_called_once()
     mock_answer_callback.assert_called_once_with("bot", "cb1", "Project 2 dipilih")
 

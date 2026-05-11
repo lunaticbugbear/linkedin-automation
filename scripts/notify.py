@@ -110,12 +110,51 @@ def answer_callback_query(bot_token: str, callback_query_id: str, text: str) -> 
     return False
 
 
+def format_success_message(
+    repo_url: str,
+    project_type: str,
+    ci_status: str,
+    vercel_url: str | None,
+    run_commands: list[str],
+    linkedin_post: str,
+) -> str:
+    return "\n\n".join(
+        [
+            "✅ <b>Project ready</b>",
+            f"Repo: {html.escape(repo_url)}",
+            f"Type: {html.escape(project_type)}",
+            f"CI: {html.escape(ci_status)}",
+            f"Vercel: {html.escape(vercel_url or 'n/a')}",
+            "<b>How to run:</b>\n" + html.escape("\n".join(run_commands)),
+            "<b>LinkedIn post:</b>\n" + html.escape(linkedin_post),
+        ]
+    )
+
+
+def format_failure_message(result: dict) -> str:
+    return "\n\n".join(
+        [
+            "❌ <b>Project generation failed</b>",
+            f"Stage: {html.escape(result.get('stage', 'unknown'))}",
+            "Last error:\n" + html.escape(result.get("error", "No error details captured")),
+            "Run log:\n" + html.escape(result.get("log_url", "n/a")),
+            "Next action:\nReview the failed stage and rerun generation after fixing the template or validation issue.",
+        ]
+    )
+
+
+def send_generation_failure(result: dict, bot_token: str, chat_id: str) -> bool:
+    return send_telegram_notification(format_failure_message(result), bot_token, chat_id)
+
+
 def send_final_project(project: dict, image_path: str, bot_token: str, chat_id: str) -> bool:
-    message = (
-        "<b>Project dibuat!</b>\n\n"
-        f"Repo: {html.escape(project['repo_url'])}\n\n"
-        "<b>--- LinkedIn Post ---</b>\n"
-        f"{html.escape(project['linkedin_post'])}"
+    message = format_success_message(
+        repo_url=project["repo_url"],
+        project_type=project.get("project_type", "unknown"),
+        ci_status=project.get("ci_status", "unknown"),
+        vercel_url=project.get("vercel_url"),
+        run_commands=project.get("run_commands", []),
+        linkedin_post=project["linkedin_post"],
     )
     response = requests.post(
         _telegram_url(bot_token, "sendMessage"),

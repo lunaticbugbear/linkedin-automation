@@ -2,6 +2,8 @@ import pytest
 import json
 from unittest.mock import patch, MagicMock
 from scripts.generate_ideas import generate_project_ideas
+from scripts.project_classifier import classify_project_type
+from scripts.project_blueprint import build_blueprint
 
 def test_generate_project_ideas_returns_list():
     with patch('scripts.generate_ideas.OpenAI') as mock_openai:
