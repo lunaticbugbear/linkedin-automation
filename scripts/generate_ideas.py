@@ -1,33 +1,33 @@
 import json
-import os
-from anthropic import Anthropic
+from openai import OpenAI
 from scripts.utils import load_config, load_prompt, setup_logging
 
 logger = setup_logging()
 
 def generate_project_ideas(max_projects: int = 3) -> list:
-    """Generate project ideas using Claude API."""
     config = load_config("config/settings.yaml")
     prompt = load_prompt("config/ai-prompt.txt")
+    ai_config = config["ai"]
 
-    client = Anthropic()
+    client = OpenAI(
+        api_key=ai_config["api_key"],
+        base_url=ai_config["base_url"],
+    )
 
-    message = client.messages.create(
-        model=config["ai"]["model"],
+    response = client.chat.completions.create(
+        model=ai_config["model"],
         max_tokens=2000,
         messages=[
             {
                 "role": "user",
-                "content": prompt
+                "content": prompt,
             }
-        ]
+        ],
     )
 
-    response_text = message.content[0].text
+    response_text = response.choices[0].message.content
 
-    # Extract JSON from response
     try:
-        # Try to find JSON array in response
         start_idx = response_text.find('[')
         end_idx = response_text.rfind(']') + 1
         if start_idx != -1 and end_idx > start_idx:
@@ -35,7 +35,7 @@ def generate_project_ideas(max_projects: int = 3) -> list:
             ideas = json.loads(json_str)
             return ideas[:max_projects]
     except json.JSONDecodeError:
-        logger.error("Failed to parse JSON from Claude response")
+        logger.error("Failed to parse JSON from AI response")
         raise
 
     return []

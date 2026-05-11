@@ -1,0 +1,37 @@
+name: LinkedIn Automation Reminder
+
+on:
+  schedule:
+    # Every 2 days at 02:20 UTC (09:20 WIB), 10 minutes before the main workflow
+    - cron: '20 2 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  remind-9router:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Telegram reminder
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+
+          bot_token = os.environ["TELEGRAM_BOT_TOKEN"]
+          chat_id = os.environ["TELEGRAM_CHAT_ID"]
+          message = (
+              "Reminder: LinkedIn automation will run in 10 minutes at 09:30 WIB.\n\n"
+              "Please turn on your laptop, keep 9Router running, and make sure the tunnel is active:\n"
+              "https://cb9vgmx.9router.com/v1"
+          )
+
+          response = requests.post(
+              f"https://api.telegram.org/bot{bot_token}/sendMessage",
+              data={"chat_id": chat_id, "text": message},
+              timeout=30,
+          )
+          response.raise_for_status()
+          PY

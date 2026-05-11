@@ -25,6 +25,9 @@ linkedin:
   hashtags: ["#ITSupport", "#Linux", "#Automation", "#DevOps", "#Cloud", "#JobSearch"]
 
 ai:
-  model: "claude-sonnet-4-6"
+  provider: "9router"
+  base_url: "${AI_BASE_URL}"
+  api_key: "${AI_API_KEY}"
+  model: "${AI_MODEL}"
   max_projects: 3
   tone: "professional-mix"
