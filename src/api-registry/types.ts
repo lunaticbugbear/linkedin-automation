@@ -184,6 +184,11 @@ export interface ImportReport {
   importedAt: string;
   added: number;
   updated: number;
+  skipped: number;
+  trusted: number;
+  needs_review: number;
+  duplicate: number;
+  records: ApiRecord[];
   rejected: RejectedRecord[];
   findings: AuditFinding[];
 }
