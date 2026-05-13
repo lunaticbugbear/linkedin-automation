@@ -102,10 +102,43 @@ export interface Contracts {
   };
 }
 
-export interface SearchResult {
+export interface RankedApiMatch {
   record: ApiRecord;
   score: number;
-  matchedFields: string[];
+  matched_fields: string[];
+  matched_terms: string[];
+  warnings: string[];
+}
+
+export interface RejectedSearchRecord {
+  id: string;
+  reason: string;
+}
+
+export interface SearchInput {
+  query: string;
+  consumer_profile?: ConsumerProfile;
+  category?: string;
+  tags?: string[];
+  auth?: AuthValue[];
+  cors?: CorsValue[];
+  pricing?: PricingValue[];
+  status?: StatusValue[];
+  limit?: number;
+}
+
+export interface ExportInput extends SearchInput {
+  format: 'json' | 'markdown';
+}
+
+export interface SearchResult {
+  query: string;
+  consumer_profile?: ConsumerProfile | null;
+  recommended: RankedApiMatch[];
+  alternatives: RankedApiMatch[];
+  rejected: RejectedSearchRecord[];
+  warnings: string[];
+  registry_health: RegistryManifest;
 }
 
 export interface RejectedRecord {
@@ -141,7 +174,7 @@ export interface AgentInput {
 
 export interface AgentOutput {
   query: string;
-  results: SearchResult[];
+  results: RankedApiMatch[];
   findings: AuditFinding[];
   generatedAt: string;
 }
