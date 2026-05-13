@@ -74,6 +74,23 @@ export interface Contracts {
   statusValues: readonly StatusValue[];
   consumerProfiles: readonly ConsumerProfile[];
   fitKeys: readonly FitKey[];
+  outputShapes: {
+    search: {
+      type: string;
+      required: string[];
+      properties: Record<string, string>;
+    };
+    export: {
+      type: string;
+      required: string[];
+      properties: Record<string, string>;
+    };
+    agent: {
+      type: string;
+      required: string[];
+      properties: Record<string, string>;
+    };
+  };
 }
 
 export interface SearchResult {

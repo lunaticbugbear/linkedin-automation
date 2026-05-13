@@ -158,59 +158,56 @@ describe('bootstrap', () => {
         statusValues: ['trusted', 'needs_review', 'rejected'],
         consumerProfiles: ['frontend-only', 'backend-required', 'prototype', 'production', 'mobile-app', 'dashboard', 'automation'],
         fitKeys: ['frontend', 'backend', 'prototype', 'production', 'mobile', 'dashboard', 'automation'],
+        outputShapes: {
+          search: {
+            type: 'object',
+            required: ['query', 'results', 'generatedAt'],
+            properties: { query: 'string', results: 'SearchResult[]', generatedAt: 'string' },
+          },
+          export: {
+            type: 'object',
+            required: ['records', 'exportedAt'],
+            properties: { records: 'ApiRecord[]', exportedAt: 'string' },
+          },
+          agent: {
+            type: 'object',
+            required: ['query', 'results', 'findings', 'generatedAt'],
+            properties: { query: 'string', results: 'SearchResult[]', findings: 'AuditFinding[]', generatedAt: 'string' },
+          },
+        },
       };
       const result = validateContracts(contracts);
       expect(result).toEqual(contracts);
     });
 
     it('contains search output shape', () => {
-      const contracts = validateContracts({
-        schemaVersion: 'api-registry',
-        authValues: ['No', 'apiKey', 'OAuth', 'User-Agent', 'X-Mashape-Key', 'unknown'],
-        corsValues: ['yes', 'no', 'unknown'],
-        pricingValues: ['free', 'free_tier', 'paid', 'unknown'],
-        statusValues: ['trusted', 'needs_review', 'rejected'],
-        consumerProfiles: ['frontend-only', 'backend-required', 'prototype', 'production', 'mobile-app', 'dashboard', 'automation'],
-        fitKeys: ['frontend', 'backend', 'prototype', 'production', 'mobile', 'dashboard', 'automation'],
-      });
-      expect(contracts.schemaVersion).toBe('api-registry');
+      bootstrapRegistry(tempDir);
+      const contracts = validateContracts(readJsonFile(registryFilePath('contracts.json', tempDir)));
+      expect(contracts.outputShapes.search.properties.results).toBe('SearchResult[]');
     });
 
     it('contains export output shape', () => {
-      const contracts = validateContracts({
-        schemaVersion: 'api-registry',
-        authValues: ['No', 'apiKey', 'OAuth', 'User-Agent', 'X-Mashape-Key', 'unknown'],
-        corsValues: ['yes', 'no', 'unknown'],
-        pricingValues: ['free', 'free_tier', 'paid', 'unknown'],
-        statusValues: ['trusted', 'needs_review', 'rejected'],
-        consumerProfiles: ['frontend-only', 'backend-required', 'prototype', 'production', 'mobile-app', 'dashboard', 'automation'],
-        fitKeys: ['frontend', 'backend', 'prototype', 'production', 'mobile', 'dashboard', 'automation'],
-      });
-      expect(Array.isArray(contracts.authValues)).toBe(true);
+      bootstrapRegistry(tempDir);
+      const contracts = validateContracts(readJsonFile(registryFilePath('contracts.json', tempDir)));
+      expect(contracts.outputShapes.export.properties.records).toBe('ApiRecord[]');
     });
 
     it('contains agent output shape', () => {
-      const contracts = validateContracts({
-        schemaVersion: 'api-registry',
-        authValues: ['No', 'apiKey', 'OAuth', 'User-Agent', 'X-Mashape-Key', 'unknown'],
-        corsValues: ['yes', 'no', 'unknown'],
-        pricingValues: ['free', 'free_tier', 'paid', 'unknown'],
-        statusValues: ['trusted', 'needs_review', 'rejected'],
-        consumerProfiles: ['frontend-only', 'backend-required', 'prototype', 'production', 'mobile-app', 'dashboard', 'automation'],
-        fitKeys: ['frontend', 'backend', 'prototype', 'production', 'mobile', 'dashboard', 'automation'],
-      });
-      expect(contracts.statusValues).toContain('trusted');
+      bootstrapRegistry(tempDir);
+      const contracts = validateContracts(readJsonFile(registryFilePath('contracts.json', tempDir)));
+      expect(contracts.outputShapes.agent.properties.findings).toBe('AuditFinding[]');
     });
   });
 
   describe('validateRegistryManifest', () => {
     it('accepts valid manifest', () => {
       const manifest = {
-        version: 'api-registry',
-        generatedAt: '2026-05-13T00:00:00Z',
-        recordCount: 0,
-        categories: ['entertainment', 'weather'],
-        sourceCatalog: 'data/api-registry/sources.json',
+        schema_version: 'api-registry',
+        last_imported_at: '2026-05-13',
+        last_audited_at: '2026-05-13',
+        freshness_days: 90,
+        health: 'ok',
+        health_score: 8.7,
       };
       const result = validateRegistryManifest(manifest);
       expect(result).toEqual(manifest);
@@ -336,6 +333,12 @@ describe('bootstrap', () => {
       const sources = readJsonFile<{ sources: unknown[] }>(registryFilePath('sources.json', tempDir));
       expect(sources).toHaveProperty('sources');
       expect(Array.isArray(sources.sources)).toBe(true);
+    });
+
+    it('bootstrap-generated registry.json passes manifest validator', () => {
+      bootstrapRegistry(tempDir);
+      const registry = readJsonFile(registryFilePath('registry.json', tempDir));
+      expect(() => validateRegistryManifest(registry)).not.toThrow();
     });
 
     it('does not overwrite existing files', () => {

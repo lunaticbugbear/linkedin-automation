@@ -1,0 +1,15 @@
+{
+  "env": {
+    "claudepowershelltool": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(sshpass *)"
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "enabledPlugins": {
+    "github@claude-plugins-official": false
+  }
+}

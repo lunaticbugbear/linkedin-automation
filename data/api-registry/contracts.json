@@ -5,5 +5,34 @@
   "pricingValues": ["free", "free_tier", "paid", "unknown"],
   "statusValues": ["trusted", "needs_review", "rejected"],
   "consumerProfiles": ["frontend-only", "backend-required", "prototype", "production", "mobile-app", "dashboard", "automation"],
-  "fitKeys": ["frontend", "backend", "prototype", "production", "mobile", "dashboard", "automation"]
+  "fitKeys": ["frontend", "backend", "prototype", "production", "mobile", "dashboard", "automation"],
+  "outputShapes": {
+    "search": {
+      "type": "object",
+      "required": ["query", "results", "generatedAt"],
+      "properties": {
+        "query": "string",
+        "results": "SearchResult[]",
+        "generatedAt": "string"
+      }
+    },
+    "export": {
+      "type": "object",
+      "required": ["records", "exportedAt"],
+      "properties": {
+        "records": "ApiRecord[]",
+        "exportedAt": "string"
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": ["query", "results", "findings", "generatedAt"],
+      "properties": {
+        "query": "string",
+        "results": "SearchResult[]",
+        "findings": "AuditFinding[]",
+        "generatedAt": "string"
+      }
+    }
+  }
 }

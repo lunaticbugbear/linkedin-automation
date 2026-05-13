@@ -73,6 +73,23 @@ export function bootstrapRegistry(cwd = process.cwd()): void {
       statusValues: STATUS_VALUES,
       consumerProfiles: CONSUMER_PROFILES,
       fitKeys: FIT_KEYS,
+      outputShapes: {
+        search: {
+          type: 'object',
+          required: ['query', 'results', 'generatedAt'],
+          properties: { query: 'string', results: 'SearchResult[]', generatedAt: 'string' },
+        },
+        export: {
+          type: 'object',
+          required: ['records', 'exportedAt'],
+          properties: { records: 'ApiRecord[]', exportedAt: 'string' },
+        },
+        agent: {
+          type: 'object',
+          required: ['query', 'results', 'findings', 'generatedAt'],
+          properties: { query: 'string', results: 'SearchResult[]', findings: 'AuditFinding[]', generatedAt: 'string' },
+        },
+      },
     };
     writeFileSync(contractsPath, JSON.stringify(contracts, null, 2));
   }
