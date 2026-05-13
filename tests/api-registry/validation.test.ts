@@ -93,7 +93,7 @@ describe('registry validation', () => {
     consumerProfiles: ['prototype'],
     source: { name: 'test', url: 'https://example.com/source', importedAt: '2026-05-13' },
     evidence: [{ url: 'https://example.com/docs', checkedAt: '2026-05-13', title: 'Docs', excerpt: 'Evidence text' }],
-    confidence: [{ field: 'auth', confidence: 0.9, source: 'docs', note: 'Documented auth' }],
+    confidence: [{ field: 'auth', confidence: 9, source: 'docs', note: 'Documented auth' }],
     updatedAt: '2026-05-13',
     createdAt: '2026-05-13',
   };
@@ -127,7 +127,7 @@ describe('registry validation', () => {
     expect(() => validateApiRecord({ ...apiRecordFixture, consumerProfiles: ['prototype', 'bad-profile'] })).toThrow('consumerProfiles[1]');
     expect(() => validateApiRecord({ ...apiRecordFixture, source: { ...apiRecordFixture.source, url: 7 } })).toThrow('source.url');
     expect(() => validateApiRecord({ ...apiRecordFixture, evidence: [{ ...apiRecordFixture.evidence[0], excerpt: 7 }] })).toThrow('evidence[0].excerpt');
-    expect(() => validateApiRecord({ ...apiRecordFixture, confidence: [{ ...apiRecordFixture.confidence[0], confidence: 2 }] })).toThrow('confidence[0].confidence');
+    expect(() => validateApiRecord({ ...apiRecordFixture, confidence: [{ ...apiRecordFixture.confidence[0], confidence: 11 }] })).toThrow('confidence[0].confidence');
   });
 
   it('accepts approved manifest shape and rejects old manifest fields', () => {

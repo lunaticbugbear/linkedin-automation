@@ -1,0 +1,2305 @@
+[
+  {
+    "id": "anilist",
+    "name": "AniList",
+    "description": "GraphQL anime and manga database API.",
+    "category": "entertainment",
+    "tags": [
+      "anime",
+      "manga",
+      "graphql"
+    ],
+    "homepage": "https://anilist.co",
+    "docsUrl": "https://docs.anilist.co",
+    "auth": "OAuth",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "mobile-app"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://docs.anilist.co",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://docs.anilist.co",
+        "title": "AniList documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://docs.anilist.co"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://docs.anilist.co"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://docs.anilist.co"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://docs.anilist.co"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://docs.anilist.co"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "jikan",
+    "name": "Jikan",
+    "description": "Unofficial MyAnimeList API for anime and manga metadata.",
+    "category": "entertainment",
+    "tags": [
+      "anime",
+      "manga",
+      "rest"
+    ],
+    "homepage": "https://jikan.moe",
+    "docsUrl": "https://docs.api.jikan.moe",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "mobile-app"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://docs.api.jikan.moe",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://docs.api.jikan.moe",
+        "title": "Jikan documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://docs.api.jikan.moe"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://docs.api.jikan.moe"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://docs.api.jikan.moe"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://docs.api.jikan.moe"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://docs.api.jikan.moe"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "tvmaze",
+    "name": "TVMaze",
+    "description": "TV show schedule, episode, and cast API.",
+    "category": "entertainment",
+    "tags": [
+      "tv",
+      "shows",
+      "metadata"
+    ],
+    "homepage": "https://www.tvmaze.com/api",
+    "docsUrl": "https://www.tvmaze.com/api",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "mobile-app"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.tvmaze.com/api",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.tvmaze.com/api",
+        "title": "TVMaze documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.tvmaze.com/api"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.tvmaze.com/api"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.tvmaze.com/api"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.tvmaze.com/api"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.tvmaze.com/api"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "rawg",
+    "name": "RAWG",
+    "description": "Video game database API for games, platforms, and stores.",
+    "category": "games",
+    "tags": [
+      "games",
+      "metadata"
+    ],
+    "homepage": "https://rawg.io/apidocs",
+    "docsUrl": "https://rawg.io/apidocs",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://rawg.io/apidocs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://rawg.io/apidocs",
+        "title": "RAWG documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://rawg.io/apidocs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://rawg.io/apidocs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://rawg.io/apidocs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://rawg.io/apidocs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://rawg.io/apidocs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "open-meteo",
+    "name": "Open-Meteo",
+    "description": "Open weather forecast API with no API key for non-commercial use.",
+    "category": "weather",
+    "tags": [
+      "forecast",
+      "weather"
+    ],
+    "homepage": "https://open-meteo.com",
+    "docsUrl": "https://open-meteo.com/en/docs",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://open-meteo.com/en/docs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://open-meteo.com/en/docs",
+        "title": "Open-Meteo documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://open-meteo.com/en/docs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://open-meteo.com/en/docs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://open-meteo.com/en/docs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://open-meteo.com/en/docs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://open-meteo.com/en/docs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "national-weather-service",
+    "name": "National Weather Service",
+    "description": "US government weather alerts, forecasts, and observations API.",
+    "category": "weather",
+    "tags": [
+      "weather",
+      "alerts",
+      "government"
+    ],
+    "homepage": "https://www.weather.gov/documentation/services-web-api",
+    "docsUrl": "https://www.weather.gov/documentation/services-web-api",
+    "auth": "User-Agent",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.weather.gov/documentation/services-web-api",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.weather.gov/documentation/services-web-api",
+        "title": "National Weather Service documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.weather.gov/documentation/services-web-api"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.weather.gov/documentation/services-web-api"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.weather.gov/documentation/services-web-api"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.weather.gov/documentation/services-web-api"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.weather.gov/documentation/services-web-api"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "weatherapi",
+    "name": "WeatherAPI",
+    "description": "Weather forecast, history, astronomy, and air quality API.",
+    "category": "weather",
+    "tags": [
+      "forecast",
+      "weather",
+      "air-quality"
+    ],
+    "homepage": "https://www.weatherapi.com",
+    "docsUrl": "https://www.weatherapi.com/docs/",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.weatherapi.com/docs/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.weatherapi.com/docs/",
+        "title": "WeatherAPI documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.weatherapi.com/docs/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.weatherapi.com/docs/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.weatherapi.com/docs/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.weatherapi.com/docs/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.weatherapi.com/docs/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "alpha-vantage",
+    "name": "Alpha Vantage",
+    "description": "Market data API for stocks, forex, and crypto.",
+    "category": "finance",
+    "tags": [
+      "stocks",
+      "forex",
+      "crypto"
+    ],
+    "homepage": "https://www.alphavantage.co",
+    "docsUrl": "https://www.alphavantage.co/documentation/",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.alphavantage.co/documentation/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.alphavantage.co/documentation/",
+        "title": "Alpha Vantage documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.alphavantage.co/documentation/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.alphavantage.co/documentation/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.alphavantage.co/documentation/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.alphavantage.co/documentation/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.alphavantage.co/documentation/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "frankfurter",
+    "name": "Frankfurter",
+    "description": "Open-source exchange rates and currency conversion API.",
+    "category": "finance",
+    "tags": [
+      "currency",
+      "exchange-rates"
+    ],
+    "homepage": "https://www.frankfurter.app",
+    "docsUrl": "https://www.frankfurter.app/docs/",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.frankfurter.app/docs/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.frankfurter.app/docs/",
+        "title": "Frankfurter documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.frankfurter.app/docs/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.frankfurter.app/docs/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.frankfurter.app/docs/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.frankfurter.app/docs/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.frankfurter.app/docs/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "coingecko",
+    "name": "CoinGecko",
+    "description": "Cryptocurrency price, market, and metadata API.",
+    "category": "finance",
+    "tags": [
+      "crypto",
+      "markets"
+    ],
+    "homepage": "https://www.coingecko.com/en/api",
+    "docsUrl": "https://docs.coingecko.com/reference/introduction",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://docs.coingecko.com/reference/introduction",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://docs.coingecko.com/reference/introduction",
+        "title": "CoinGecko documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://docs.coingecko.com/reference/introduction"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://docs.coingecko.com/reference/introduction"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://docs.coingecko.com/reference/introduction"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://docs.coingecko.com/reference/introduction"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://docs.coingecko.com/reference/introduction"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "openstreetmap-nominatim",
+    "name": "OpenStreetMap Nominatim",
+    "description": "OpenStreetMap geocoding and reverse geocoding API.",
+    "category": "maps",
+    "tags": [
+      "geocoding",
+      "openstreetmap"
+    ],
+    "homepage": "https://nominatim.org",
+    "docsUrl": "https://nominatim.org/release-docs/latest/api/Overview/",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "mobile-app",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://nominatim.org/release-docs/latest/api/Overview/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://nominatim.org/release-docs/latest/api/Overview/",
+        "title": "OpenStreetMap Nominatim documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://nominatim.org/release-docs/latest/api/Overview/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://nominatim.org/release-docs/latest/api/Overview/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://nominatim.org/release-docs/latest/api/Overview/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://nominatim.org/release-docs/latest/api/Overview/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://nominatim.org/release-docs/latest/api/Overview/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "openrouteservice",
+    "name": "OpenRouteService",
+    "description": "Routing, directions, geocoding, and isochrone APIs.",
+    "category": "maps",
+    "tags": [
+      "routing",
+      "directions",
+      "geocoding"
+    ],
+    "homepage": "https://openrouteservice.org",
+    "docsUrl": "https://openrouteservice.org/dev/#/api-docs",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "mobile-app",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://openrouteservice.org/dev/#/api-docs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://openrouteservice.org/dev/#/api-docs",
+        "title": "OpenRouteService documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://openrouteservice.org/dev/#/api-docs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://openrouteservice.org/dev/#/api-docs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://openrouteservice.org/dev/#/api-docs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://openrouteservice.org/dev/#/api-docs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://openrouteservice.org/dev/#/api-docs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "github-rest",
+    "name": "GitHub REST",
+    "description": "GitHub REST API for repositories, issues, pulls, and users.",
+    "category": "developer-tools",
+    "tags": [
+      "git",
+      "repos",
+      "issues"
+    ],
+    "homepage": "https://docs.github.com/en/rest",
+    "docsUrl": "https://docs.github.com/en/rest",
+    "auth": "OAuth",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://docs.github.com/en/rest",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://docs.github.com/en/rest",
+        "title": "GitHub REST documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://docs.github.com/en/rest"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://docs.github.com/en/rest"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://docs.github.com/en/rest"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://docs.github.com/en/rest"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://docs.github.com/en/rest"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "stack-exchange",
+    "name": "Stack Exchange",
+    "description": "Q&A network API for Stack Overflow and related sites.",
+    "category": "developer-tools",
+    "tags": [
+      "qa",
+      "stackoverflow"
+    ],
+    "homepage": "https://api.stackexchange.com",
+    "docsUrl": "https://api.stackexchange.com/docs",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://api.stackexchange.com/docs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://api.stackexchange.com/docs",
+        "title": "Stack Exchange documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://api.stackexchange.com/docs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://api.stackexchange.com/docs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://api.stackexchange.com/docs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://api.stackexchange.com/docs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://api.stackexchange.com/docs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "npm-registry",
+    "name": "npm Registry",
+    "description": "Package metadata and download API for npm packages.",
+    "category": "developer-tools",
+    "tags": [
+      "packages",
+      "javascript"
+    ],
+    "homepage": "https://registry.npmjs.org",
+    "docsUrl": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+        "title": "npm Registry documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "hacker-news",
+    "name": "Hacker News",
+    "description": "Firebase-backed API for Hacker News stories, users, and comments.",
+    "category": "developer-tools",
+    "tags": [
+      "news",
+      "community"
+    ],
+    "homepage": "https://github.com/HackerNews/API",
+    "docsUrl": "https://github.com/HackerNews/API",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://github.com/HackerNews/API",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://github.com/HackerNews/API",
+        "title": "Hacker News documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://github.com/HackerNews/API"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://github.com/HackerNews/API"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://github.com/HackerNews/API"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://github.com/HackerNews/API"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://github.com/HackerNews/API"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "adzuna",
+    "name": "Adzuna",
+    "description": "Job search API for job listings and labor market data.",
+    "category": "jobs",
+    "tags": [
+      "jobs",
+      "search"
+    ],
+    "homepage": "https://developer.adzuna.com",
+    "docsUrl": "https://developer.adzuna.com/docs",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://developer.adzuna.com/docs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://developer.adzuna.com/docs",
+        "title": "Adzuna documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://developer.adzuna.com/docs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://developer.adzuna.com/docs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://developer.adzuna.com/docs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://developer.adzuna.com/docs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://developer.adzuna.com/docs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "usajobs",
+    "name": "USAJOBS",
+    "description": "US federal government jobs API.",
+    "category": "jobs",
+    "tags": [
+      "jobs",
+      "government"
+    ],
+    "homepage": "https://developer.usajobs.gov",
+    "docsUrl": "https://developer.usajobs.gov/API-Reference",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://developer.usajobs.gov/API-Reference",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://developer.usajobs.gov/API-Reference",
+        "title": "USAJOBS documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://developer.usajobs.gov/API-Reference"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://developer.usajobs.gov/API-Reference"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://developer.usajobs.gov/API-Reference"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://developer.usajobs.gov/API-Reference"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://developer.usajobs.gov/API-Reference"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "newsapi",
+    "name": "NewsAPI",
+    "description": "News headline and article search API.",
+    "category": "news",
+    "tags": [
+      "news",
+      "headlines"
+    ],
+    "homepage": "https://newsapi.org",
+    "docsUrl": "https://newsapi.org/docs",
+    "auth": "apiKey",
+    "cors": "no",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://newsapi.org/docs",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://newsapi.org/docs",
+        "title": "NewsAPI documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://newsapi.org/docs"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://newsapi.org/docs"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://newsapi.org/docs"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://newsapi.org/docs"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://newsapi.org/docs"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "gnews",
+    "name": "GNews",
+    "description": "News search and headline API.",
+    "category": "news",
+    "tags": [
+      "news",
+      "headlines"
+    ],
+    "homepage": "https://gnews.io",
+    "docsUrl": "https://gnews.io/docs/v4",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://gnews.io/docs/v4",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://gnews.io/docs/v4",
+        "title": "GNews documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://gnews.io/docs/v4"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://gnews.io/docs/v4"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://gnews.io/docs/v4"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://gnews.io/docs/v4"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://gnews.io/docs/v4"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "hugging-face",
+    "name": "Hugging Face",
+    "description": "Model, dataset, and inference APIs for machine learning projects.",
+    "category": "ai",
+    "tags": [
+      "ai",
+      "models",
+      "datasets"
+    ],
+    "homepage": "https://huggingface.co",
+    "docsUrl": "https://huggingface.co/docs/api-inference/index",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "prototype",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://huggingface.co/docs/api-inference/index",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://huggingface.co/docs/api-inference/index",
+        "title": "Hugging Face documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://huggingface.co/docs/api-inference/index"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://huggingface.co/docs/api-inference/index"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://huggingface.co/docs/api-inference/index"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://huggingface.co/docs/api-inference/index"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://huggingface.co/docs/api-inference/index"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "rest-countries",
+    "name": "REST Countries",
+    "description": "Country metadata API for names, codes, currencies, and flags.",
+    "category": "data",
+    "tags": [
+      "countries",
+      "reference"
+    ],
+    "homepage": "https://restcountries.com",
+    "docsUrl": "https://restcountries.com/",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://restcountries.com/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://restcountries.com/",
+        "title": "REST Countries documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://restcountries.com/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://restcountries.com/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://restcountries.com/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://restcountries.com/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://restcountries.com/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "world-bank",
+    "name": "World Bank",
+    "description": "Global development indicators and country data API.",
+    "category": "data",
+    "tags": [
+      "economics",
+      "indicators"
+    ],
+    "homepage": "https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information",
+    "docsUrl": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard",
+      "automation"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures",
+        "title": "World Bank documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "pexels",
+    "name": "Pexels",
+    "description": "Stock photo and video API.",
+    "category": "images",
+    "tags": [
+      "photos",
+      "stock"
+    ],
+    "homepage": "https://www.pexels.com/api/",
+    "docsUrl": "https://www.pexels.com/api/documentation/",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.pexels.com/api/documentation/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.pexels.com/api/documentation/",
+        "title": "Pexels documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.pexels.com/api/documentation/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.pexels.com/api/documentation/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.pexels.com/api/documentation/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.pexels.com/api/documentation/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.pexels.com/api/documentation/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "unsplash",
+    "name": "Unsplash",
+    "description": "Photo discovery and search API.",
+    "category": "images",
+    "tags": [
+      "photos",
+      "stock"
+    ],
+    "homepage": "https://unsplash.com/developers",
+    "docsUrl": "https://unsplash.com/documentation",
+    "auth": "OAuth",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://unsplash.com/documentation",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://unsplash.com/documentation",
+        "title": "Unsplash documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://unsplash.com/documentation"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://unsplash.com/documentation"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://unsplash.com/documentation"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://unsplash.com/documentation"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://unsplash.com/documentation"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "wikipedia-rest",
+    "name": "Wikipedia REST",
+    "description": "REST API for Wikipedia page summaries, search, and media.",
+    "category": "text",
+    "tags": [
+      "encyclopedia",
+      "knowledge"
+    ],
+    "homepage": "https://www.mediawiki.org/wiki/API_REST_API",
+    "docsUrl": "https://www.mediawiki.org/wiki/API_REST_API",
+    "auth": "User-Agent",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "prototype"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.mediawiki.org/wiki/API_REST_API",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.mediawiki.org/wiki/API_REST_API",
+        "title": "Wikipedia REST documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.mediawiki.org/wiki/API_REST_API"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.mediawiki.org/wiki/API_REST_API"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.mediawiki.org/wiki/API_REST_API"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.mediawiki.org/wiki/API_REST_API"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.mediawiki.org/wiki/API_REST_API"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "open-library",
+    "name": "Open Library",
+    "description": "Book, author, and subject metadata API.",
+    "category": "education",
+    "tags": [
+      "books",
+      "library"
+    ],
+    "homepage": "https://openlibrary.org/developers/api",
+    "docsUrl": "https://openlibrary.org/developers/api",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://openlibrary.org/developers/api",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://openlibrary.org/developers/api",
+        "title": "Open Library documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://openlibrary.org/developers/api"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://openlibrary.org/developers/api"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://openlibrary.org/developers/api"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://openlibrary.org/developers/api"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://openlibrary.org/developers/api"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "crossref",
+    "name": "Crossref",
+    "description": "Scholarly metadata API for DOI records and works.",
+    "category": "education",
+    "tags": [
+      "doi",
+      "scholarly"
+    ],
+    "homepage": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+    "docsUrl": "https://api.crossref.org/swagger-ui/index.html",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://api.crossref.org/swagger-ui/index.html",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://api.crossref.org/swagger-ui/index.html",
+        "title": "Crossref documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://api.crossref.org/swagger-ui/index.html"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://api.crossref.org/swagger-ui/index.html"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://api.crossref.org/swagger-ui/index.html"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://api.crossref.org/swagger-ui/index.html"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://api.crossref.org/swagger-ui/index.html"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "the-sports-db",
+    "name": "TheSportsDB",
+    "description": "Sports teams, events, players, and league data API.",
+    "category": "sports",
+    "tags": [
+      "sports",
+      "metadata"
+    ],
+    "homepage": "https://www.thesportsdb.com/api.php",
+    "docsUrl": "https://www.thesportsdb.com/api.php",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://www.thesportsdb.com/api.php",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://www.thesportsdb.com/api.php",
+        "title": "TheSportsDB documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://www.thesportsdb.com/api.php"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://www.thesportsdb.com/api.php"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://www.thesportsdb.com/api.php"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://www.thesportsdb.com/api.php"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://www.thesportsdb.com/api.php"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "fda-openfda",
+    "name": "openFDA",
+    "description": "US FDA public datasets API for drugs, devices, and food.",
+    "category": "health",
+    "tags": [
+      "health",
+      "government",
+      "fda"
+    ],
+    "homepage": "https://open.fda.gov/apis/",
+    "docsUrl": "https://open.fda.gov/apis/",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://open.fda.gov/apis/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://open.fda.gov/apis/",
+        "title": "openFDA documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://open.fda.gov/apis/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://open.fda.gov/apis/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://open.fda.gov/apis/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://open.fda.gov/apis/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://open.fda.gov/apis/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "openalex",
+    "name": "OpenAlex",
+    "description": "Open scholarly graph API for works, authors, institutions, and concepts.",
+    "category": "education",
+    "tags": [
+      "scholarly",
+      "research"
+    ],
+    "homepage": "https://openalex.org",
+    "docsUrl": "https://docs.openalex.org",
+    "auth": "No",
+    "cors": "yes",
+    "pricing": "free",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "frontend-only",
+      "dashboard"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://docs.openalex.org",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://docs.openalex.org",
+        "title": "OpenAlex documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://docs.openalex.org"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://docs.openalex.org"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://docs.openalex.org"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://docs.openalex.org"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://docs.openalex.org"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  },
+  {
+    "id": "urlscan",
+    "name": "urlscan.io",
+    "description": "URL scanning and threat intelligence API.",
+    "category": "developer-tools",
+    "tags": [
+      "security",
+      "url-scan"
+    ],
+    "homepage": "https://urlscan.io",
+    "docsUrl": "https://urlscan.io/docs/api/",
+    "auth": "apiKey",
+    "cors": "yes",
+    "pricing": "free_tier",
+    "status": "trusted",
+    "fit": {
+      "frontend": 8,
+      "backend": 9,
+      "prototype": 9,
+      "production": 8,
+      "mobile": 8,
+      "dashboard": 8,
+      "automation": 8
+    },
+    "consumerProfiles": [
+      "backend-required",
+      "automation",
+      "production"
+    ],
+    "source": {
+      "name": "curated-seed",
+      "url": "https://urlscan.io/docs/api/",
+      "importedAt": "2026-05-13"
+    },
+    "evidence": [
+      {
+        "url": "https://urlscan.io/docs/api/",
+        "title": "urlscan.io documentation",
+        "checkedAt": "2026-05-13",
+        "excerpt": "Official API documentation or developer reference confirms public API details."
+      }
+    ],
+    "confidence": [
+      {
+        "field": "homepage",
+        "confidence": 9,
+        "source": "https://urlscan.io/docs/api/"
+      },
+      {
+        "field": "docsUrl",
+        "confidence": 9,
+        "source": "https://urlscan.io/docs/api/"
+      },
+      {
+        "field": "auth",
+        "confidence": 8,
+        "source": "https://urlscan.io/docs/api/"
+      },
+      {
+        "field": "cors",
+        "confidence": 7,
+        "source": "https://urlscan.io/docs/api/"
+      },
+      {
+        "field": "pricing",
+        "confidence": 7,
+        "source": "https://urlscan.io/docs/api/"
+      }
+    ],
+    "updatedAt": "2026-05-13",
+    "createdAt": "2026-05-13"
+  }
+]

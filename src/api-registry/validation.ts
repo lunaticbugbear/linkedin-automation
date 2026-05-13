@@ -244,8 +244,8 @@ export function validateApiRecord(value: unknown): ApiRecord {
     const confObj = conf as Record<string, unknown>;
     if (typeof confObj.field !== 'string') throw new Error(`confidence[${i}].field must be string`);
     const confScore = confObj.confidence;
-    if (typeof confScore !== 'number' || confScore < 0 || confScore > 1) {
-      throw new Error(`confidence[${i}].confidence must be number 0-1, got ${confScore}`);
+    if (typeof confScore !== 'number' || confScore < 1 || confScore > 10) {
+      throw new Error(`confidence[${i}].confidence must be number 1-10, got ${confScore}`);
     }
   }
 
