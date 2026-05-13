@@ -49,6 +49,14 @@ export interface ApiRecord {
   confidence: FieldConfidence[];
   updatedAt: string;
   createdAt: string;
+  notes?: string[];
+}
+
+export interface DuplicateMatch {
+  type: 'same-docs' | 'possible-duplicate';
+  existingId: string;
+  candidateId: string;
+  reason: string;
 }
 
 export interface RegistryManifest {
