@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "api-registry",
+  "authValues": ["No", "apiKey", "OAuth", "User-Agent", "X-Mashape-Key", "unknown"],
+  "corsValues": ["yes", "no", "unknown"],
+  "pricingValues": ["free", "free_tier", "paid", "unknown"],
+  "statusValues": ["trusted", "needs_review", "rejected"],
+  "consumerProfiles": ["frontend-only", "backend-required", "prototype", "production", "mobile-app", "dashboard", "automation"],
+  "fitKeys": ["frontend", "backend", "prototype", "production", "mobile", "dashboard", "automation"]
+}

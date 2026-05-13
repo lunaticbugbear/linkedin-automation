@@ -1,0 +1,8 @@
+{
+  "anime": ["animation", "manga", "entertainment"],
+  "movie": ["film", "cinema", "entertainment"],
+  "job": ["career", "employment", "recruiting"],
+  "weather app": ["forecast", "climate", "weather"],
+  "finance tracker": ["stocks", "currency", "finance"],
+  "developer tool": ["devtools", "programming", "developer-tools"]
+}

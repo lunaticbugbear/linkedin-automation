@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "name": "public-apis",
+      "url": "https://github.com/public-apis/public-apis",
+      "importedAt": "2026-05-13",
+      "license": "MIT"
+    }
+  ],
+  "updatedAt": "2026-05-13"
+}

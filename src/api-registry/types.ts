@@ -64,7 +64,7 @@ export interface SourceCatalog {
   updatedAt: string;
 }
 
-export type Aliases = Record<string, string>;
+export type Aliases = Record<string, string[]>;
 
 export interface Contracts {
   schemaVersion: string;
