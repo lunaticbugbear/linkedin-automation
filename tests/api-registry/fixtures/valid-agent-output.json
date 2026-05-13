@@ -1,0 +1,65 @@
+{
+  "query": "weather APIs",
+  "generatedAt": "2026-05-13T00:00:00Z",
+  "results": [
+    {
+      "record": {
+        "id": "open-meteo",
+        "name": "Open-Meteo",
+        "description": "Free weather forecast API",
+        "category": "weather",
+        "tags": ["forecast", "climate"],
+        "homepage": "https://open-meteo.com",
+        "docsUrl": "https://open-meteo.com/docs",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 9,
+          "backend": 8,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 9,
+          "dashboard": 9,
+          "automation": 7
+        },
+        "consumerProfiles": ["frontend-only", "prototype", "production"],
+        "source": {
+          "name": "agent-research",
+          "url": "https://open-meteo.com",
+          "importedAt": "2026-05-13T00:00:00Z"
+        },
+        "evidence": [
+          {
+            "url": "https://open-meteo.com/docs",
+            "title": "Open-Meteo Documentation",
+            "checkedAt": "2026-05-13T00:00:00Z",
+            "excerpt": "Free weather API with no authentication required"
+          }
+        ],
+        "confidence": [
+          {
+            "field": "auth",
+            "confidence": 10,
+            "source": "https://open-meteo.com/docs",
+            "note": "Confirmed no auth required"
+          },
+          {
+            "field": "cors",
+            "confidence": 9,
+            "source": "https://open-meteo.com/docs",
+            "note": "CORS enabled for browser access"
+          }
+        ],
+        "updatedAt": "2026-05-13T00:00:00Z",
+        "createdAt": "2026-05-13T00:00:00Z"
+      },
+      "score": 9.5,
+      "matched_fields": ["name", "description", "category"],
+      "matched_terms": ["weather", "forecast"],
+      "warnings": []
+    }
+  ],
+  "findings": []
+}

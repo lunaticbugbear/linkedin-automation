@@ -1,0 +1,58 @@
+{
+  "query": "broken APIs",
+  "generatedAt": "2026-05-13T00:00:00Z",
+  "results": [
+    {
+      "record": {
+        "id": "partial-broken",
+        "name": "Partial Broken API",
+        "description": "This record is missing evidence",
+        "category": "weather",
+        "tags": ["broken"],
+        "homepage": "https://example.com",
+        "docsUrl": "https://example.com/docs",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 5,
+          "backend": 5,
+          "prototype": 5,
+          "production": 5,
+          "mobile": 5,
+          "dashboard": 5,
+          "automation": 5
+        },
+        "consumerProfiles": ["prototype"],
+        "source": {
+          "name": "agent-research",
+          "url": "https://example.com",
+          "importedAt": "2026-05-13T00:00:00Z"
+        },
+        "evidence": [],
+        "confidence": [
+          {
+            "field": "auth",
+            "confidence": 5,
+            "source": "https://example.com/docs"
+          }
+        ],
+        "updatedAt": "2026-05-13T00:00:00Z",
+        "createdAt": "2026-05-13T00:00:00Z"
+      },
+      "score": 5.0,
+      "matched_fields": ["name"],
+      "matched_terms": ["broken"],
+      "warnings": ["missing evidence"]
+    }
+  ],
+  "findings": [
+    {
+      "level": "error",
+      "code": "invalid_confidence",
+      "message": "Confidence source does not match any evidence URL",
+      "recordId": "partial-broken"
+    }
+  ]
+}

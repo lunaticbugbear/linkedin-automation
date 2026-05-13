@@ -192,3 +192,12 @@ export interface ImportReport {
   rejected: RejectedRecord[];
   findings: AuditFinding[];
 }
+
+export interface RefreshReport {
+  refreshed: number;
+  unchanged: number;
+  failed: number;
+  needs_review: number;
+  records: ApiRecord[];
+  findings: AuditFinding[];
+}
