@@ -1,0 +1,440 @@
+{
+  "query": "developer tools",
+  "consumer_profile": null,
+  "recommended": [
+    {
+      "record": {
+        "id": "github-rest",
+        "name": "GitHub REST",
+        "description": "GitHub REST API for repositories, issues, pulls, and users.",
+        "category": "developer-tools",
+        "tags": [
+          "git",
+          "repos",
+          "issues"
+        ],
+        "homepage": "https://docs.github.com/en/rest",
+        "docsUrl": "https://docs.github.com/en/rest",
+        "auth": "OAuth",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "production"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://docs.github.com/en/rest",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://docs.github.com/en/rest",
+            "title": "GitHub REST documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://docs.github.com/en/rest"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://docs.github.com/en/rest"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://docs.github.com/en/rest"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://docs.github.com/en/rest"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://docs.github.com/en/rest"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "developer-tools"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "description": "Firebase-backed API for Hacker News stories, users, and comments.",
+        "category": "developer-tools",
+        "tags": [
+          "news",
+          "community"
+        ],
+        "homepage": "https://github.com/HackerNews/API",
+        "docsUrl": "https://github.com/HackerNews/API",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "production"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://github.com/HackerNews/API",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://github.com/HackerNews/API",
+            "title": "Hacker News documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://github.com/HackerNews/API"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://github.com/HackerNews/API"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://github.com/HackerNews/API"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://github.com/HackerNews/API"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://github.com/HackerNews/API"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "developer-tools"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "npm-registry",
+        "name": "npm Registry",
+        "description": "Package metadata and download API for npm packages.",
+        "category": "developer-tools",
+        "tags": [
+          "packages",
+          "javascript"
+        ],
+        "homepage": "https://registry.npmjs.org",
+        "docsUrl": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "production"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md",
+            "title": "npm Registry documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "developer-tools"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "stack-exchange",
+        "name": "Stack Exchange",
+        "description": "Q&A network API for Stack Overflow and related sites.",
+        "category": "developer-tools",
+        "tags": [
+          "qa",
+          "stackoverflow"
+        ],
+        "homepage": "https://api.stackexchange.com",
+        "docsUrl": "https://api.stackexchange.com/docs",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "production"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://api.stackexchange.com/docs",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://api.stackexchange.com/docs",
+            "title": "Stack Exchange documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://api.stackexchange.com/docs"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://api.stackexchange.com/docs"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://api.stackexchange.com/docs"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://api.stackexchange.com/docs"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://api.stackexchange.com/docs"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "developer-tools"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "urlscan",
+        "name": "urlscan.io",
+        "description": "URL scanning and threat intelligence API.",
+        "category": "developer-tools",
+        "tags": [
+          "security",
+          "url-scan"
+        ],
+        "homepage": "https://urlscan.io",
+        "docsUrl": "https://urlscan.io/docs/api/",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free_tier",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "production"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://urlscan.io/docs/api/",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://urlscan.io/docs/api/",
+            "title": "urlscan.io documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://urlscan.io/docs/api/"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://urlscan.io/docs/api/"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://urlscan.io/docs/api/"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://urlscan.io/docs/api/"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://urlscan.io/docs/api/"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "developer-tools"
+      ],
+      "warnings": []
+    }
+  ],
+  "alternatives": [],
+  "rejected": [],
+  "warnings": [],
+  "registry_health": {
+    "schema_version": "api-registry",
+    "last_imported_at": "2026-05-13",
+    "last_audited_at": "2026-05-13",
+    "freshness_days": 90,
+    "health": "ok",
+    "health_score": 8.7
+  },
+  "contract": {
+    "type": "object",
+    "required": [
+      "records",
+      "exportedAt"
+    ],
+    "properties": {
+      "records": "ApiRecord[]",
+      "exportedAt": "string"
+    }
+  },
+  "exportedAt": "2026-05-13T00:00:00.000Z"
+}

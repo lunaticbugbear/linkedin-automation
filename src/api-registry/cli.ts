@@ -17,7 +17,16 @@ function loadRegistry(cwd: string): { records: ApiRecord[]; manifest: RegistryMa
   const contracts = readJsonFile<Contracts>(registryFilePath('contracts.json', cwd));
   const categories = readJsonFile<string[]>(registryFilePath('categories.json', cwd));
   const recordsPath = registryFilePath('records.json', cwd);
-  const records: ApiRecord[] = existsSync(recordsPath) ? readJsonFile<ApiRecord[]>(recordsPath) : [];
+  let records: ApiRecord[] = existsSync(recordsPath) ? readJsonFile<ApiRecord[]>(recordsPath) : [];
+
+  // Fallback to apis.json if records.json is empty
+  if (records.length === 0) {
+    const apisPath = registryFilePath('apis.json', cwd);
+    if (existsSync(apisPath)) {
+      records = readJsonFile<ApiRecord[]>(apisPath);
+    }
+  }
+
   return { records, manifest, aliases, contracts, categories };
 }
 
@@ -59,7 +68,8 @@ async function cmdSearch(args: string[], flags: Record<string, string>, cwd: str
   if (!query) throw new Error('search: missing query');
   const { records, manifest, aliases } = loadRegistry(cwd);
   const limit = flags.limit ? parseInt(flags.limit, 10) : 10;
-  const result = searchApis({ query, limit }, records, aliases, manifest);
+  const consumer_profile = flags.profile as any;
+  const result = searchApis({ query, limit, consumer_profile }, records, aliases, manifest);
   const lines = [`search: ${query}`];
   result.recommended.forEach((match, i) => {
     lines.push(`${i + 1}. ${match.record.name} [${match.record.category}] score=${match.score}`);

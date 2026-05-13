@@ -1,0 +1,284 @@
+{
+  "query": "finance tracker",
+  "consumer_profile": null,
+  "recommended": [
+    {
+      "record": {
+        "id": "alpha-vantage",
+        "name": "Alpha Vantage",
+        "description": "Market data API for stocks, forex, and crypto.",
+        "category": "finance",
+        "tags": [
+          "stocks",
+          "forex",
+          "crypto"
+        ],
+        "homepage": "https://www.alphavantage.co",
+        "docsUrl": "https://www.alphavantage.co/documentation/",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free_tier",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "dashboard",
+          "automation"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://www.alphavantage.co/documentation/",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://www.alphavantage.co/documentation/",
+            "title": "Alpha Vantage documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://www.alphavantage.co/documentation/"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://www.alphavantage.co/documentation/"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://www.alphavantage.co/documentation/"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://www.alphavantage.co/documentation/"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://www.alphavantage.co/documentation/"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 160,
+      "matched_fields": [
+        "category",
+        "description",
+        "tags"
+      ],
+      "matched_terms": [
+        "finance",
+        "stocks"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "frankfurter",
+        "name": "Frankfurter",
+        "description": "Open-source exchange rates and currency conversion API.",
+        "category": "finance",
+        "tags": [
+          "currency",
+          "exchange-rates"
+        ],
+        "homepage": "https://www.frankfurter.app",
+        "docsUrl": "https://www.frankfurter.app/docs/",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "dashboard",
+          "automation"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://www.frankfurter.app/docs/",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://www.frankfurter.app/docs/",
+            "title": "Frankfurter documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://www.frankfurter.app/docs/"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://www.frankfurter.app/docs/"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://www.frankfurter.app/docs/"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://www.frankfurter.app/docs/"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://www.frankfurter.app/docs/"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 160,
+      "matched_fields": [
+        "category",
+        "description",
+        "tags"
+      ],
+      "matched_terms": [
+        "finance",
+        "currency"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "coingecko",
+        "name": "CoinGecko",
+        "description": "Cryptocurrency price, market, and metadata API.",
+        "category": "finance",
+        "tags": [
+          "crypto",
+          "markets"
+        ],
+        "homepage": "https://www.coingecko.com/en/api",
+        "docsUrl": "https://docs.coingecko.com/reference/introduction",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free_tier",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "dashboard",
+          "automation"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://docs.coingecko.com/reference/introduction",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://docs.coingecko.com/reference/introduction",
+            "title": "CoinGecko documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://docs.coingecko.com/reference/introduction"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://docs.coingecko.com/reference/introduction"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://docs.coingecko.com/reference/introduction"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://docs.coingecko.com/reference/introduction"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://docs.coingecko.com/reference/introduction"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 140,
+      "matched_fields": [
+        "category",
+        "description"
+      ],
+      "matched_terms": [
+        "finance",
+        "currency"
+      ],
+      "warnings": []
+    }
+  ],
+  "alternatives": [],
+  "rejected": [],
+  "warnings": [],
+  "registry_health": {
+    "schema_version": "api-registry",
+    "last_imported_at": "2026-05-13",
+    "last_audited_at": "2026-05-13",
+    "freshness_days": 90,
+    "health": "ok",
+    "health_score": 8.7
+  },
+  "contract": {
+    "type": "object",
+    "required": [
+      "records",
+      "exportedAt"
+    ],
+    "properties": {
+      "records": "ApiRecord[]",
+      "exportedAt": "string"
+    }
+  },
+  "exportedAt": "2026-05-13T00:00:00.000Z"
+}

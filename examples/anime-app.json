@@ -1,0 +1,286 @@
+{
+  "query": "anime app",
+  "consumer_profile": null,
+  "recommended": [
+    {
+      "record": {
+        "id": "anilist",
+        "name": "AniList",
+        "description": "GraphQL anime and manga database API.",
+        "category": "entertainment",
+        "tags": [
+          "anime",
+          "manga",
+          "graphql"
+        ],
+        "homepage": "https://anilist.co",
+        "docsUrl": "https://docs.anilist.co",
+        "auth": "OAuth",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "frontend-only",
+          "prototype",
+          "mobile-app"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://docs.anilist.co",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://docs.anilist.co",
+            "title": "AniList documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://docs.anilist.co"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://docs.anilist.co"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://docs.anilist.co"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://docs.anilist.co"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://docs.anilist.co"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 205,
+      "matched_fields": [
+        "description",
+        "tags",
+        "category"
+      ],
+      "matched_terms": [
+        "anime",
+        "manga",
+        "entertainment"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "jikan",
+        "name": "Jikan",
+        "description": "Unofficial MyAnimeList API for anime and manga metadata.",
+        "category": "entertainment",
+        "tags": [
+          "anime",
+          "manga",
+          "rest"
+        ],
+        "homepage": "https://jikan.moe",
+        "docsUrl": "https://docs.api.jikan.moe",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "frontend-only",
+          "prototype",
+          "mobile-app"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://docs.api.jikan.moe",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://docs.api.jikan.moe",
+            "title": "Jikan documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://docs.api.jikan.moe"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://docs.api.jikan.moe"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://docs.api.jikan.moe"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://docs.api.jikan.moe"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://docs.api.jikan.moe"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 205,
+      "matched_fields": [
+        "description",
+        "tags",
+        "category"
+      ],
+      "matched_terms": [
+        "anime",
+        "manga",
+        "entertainment"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "tvmaze",
+        "name": "TVMaze",
+        "description": "TV show schedule, episode, and cast API.",
+        "category": "entertainment",
+        "tags": [
+          "tv",
+          "shows",
+          "metadata"
+        ],
+        "homepage": "https://www.tvmaze.com/api",
+        "docsUrl": "https://www.tvmaze.com/api",
+        "auth": "No",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "frontend-only",
+          "prototype",
+          "mobile-app"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://www.tvmaze.com/api",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://www.tvmaze.com/api",
+            "title": "TVMaze documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://www.tvmaze.com/api"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://www.tvmaze.com/api"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://www.tvmaze.com/api"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://www.tvmaze.com/api"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://www.tvmaze.com/api"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 115,
+      "matched_fields": [
+        "category"
+      ],
+      "matched_terms": [
+        "entertainment"
+      ],
+      "warnings": []
+    }
+  ],
+  "alternatives": [],
+  "rejected": [],
+  "warnings": [],
+  "registry_health": {
+    "schema_version": "api-registry",
+    "last_imported_at": "2026-05-13",
+    "last_audited_at": "2026-05-13",
+    "freshness_days": 90,
+    "health": "ok",
+    "health_score": 8.7
+  },
+  "contract": {
+    "type": "object",
+    "required": [
+      "records",
+      "exportedAt"
+    ],
+    "properties": {
+      "records": "ApiRecord[]",
+      "exportedAt": "string"
+    }
+  },
+  "exportedAt": "2026-05-13T00:00:00.000Z"
+}

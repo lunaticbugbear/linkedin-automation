@@ -5,7 +5,7 @@ export function exportShortlist(input: ExportInput, records: ApiRecord[], aliase
   const result = searchApis(input, records, aliases, manifest);
 
   if (input.format === 'json') {
-    return JSON.stringify({ ...result, contract: contracts.outputShapes.export, exportedAt: new Date().toISOString() }, null, 2);
+    return JSON.stringify({ ...result, contract: contracts.outputShapes.export, exportedAt: `${manifest.last_audited_at}T00:00:00.000Z` }, null, 2);
   }
 
   return toMarkdown(result);

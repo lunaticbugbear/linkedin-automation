@@ -1,28 +1,3 @@
-# API Registry for Claude Code
-
-## Problem
-
-AI app builders need reliable public API choices before implementation starts. Public API lists are useful, but they rarely answer which API fits a frontend prototype, dashboard, automation, or production app.
-
-## Value proposition
-
-API Registry turns an app idea into a ranked, reusable API shortlist with fit scores, auth, CORS, pricing, confidence, and source provenance. It stores everything locally and exports normalized results for other Claude Code skills or agents.
-
-## Quick start
-
-1. Clone and install: `git clone [repo-url] && cd api-registry && npm install`.
-2. Run seed/audit check: `npm run registry -- audit`.
-3. Search: `npm run registry -- search "anime app" --profile frontend-only`.
-
-## Demo transcript
-
-$ npm run registry -- search "anime app" --profile frontend-only
-search: anime app
-1. AniList [entertainment] score=265
-2. Jikan [entertainment] score=265
-3. TVMaze [entertainment] score=175
-
-$ npm run registry -- export "weather dashboard" --format json
 {
   "query": "weather dashboard",
   "consumer_profile": null,
@@ -308,29 +283,3 @@ $ npm run registry -- export "weather dashboard" --format json
   },
   "exportedAt": "2026-05-13T00:00:00.000Z"
 }
-
-## Command reference
-
-- `add`: validate and add one API record JSON file: `add <file>`.
-- `search`: rank local APIs by query, profile fit, confidence, freshness, and completeness: `search <query> [--profile frontend-only] [--limit 10]`.
-- `import`: import APIs from a curated source export such as public-apis markdown: `import <file>`.
-- `refresh`: list stale records that need re-checking.
-- `audit`: validate registry quality and update health metadata.
-- `export`: produce a structured shortlist for another skill or agent: `export <query> --format json|markdown`.
-
-## Examples
-
-See `examples/anime-app.json`, `examples/weather-dashboard.json`, `examples/finance-tracker.json`, `examples/job-board.json`, and `examples/developer-tools.json` for real CLI export output.
-
-## Documentation
-
-- `docs/schema.md`
-- `docs/commands.md`
-- `docs/agent-contract.md`
-- `docs/source-policy.md`
-- `docs/release-checklist.md`
-- `docs/linkedin-post.md`
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).

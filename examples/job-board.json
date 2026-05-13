@@ -1,0 +1,196 @@
+{
+  "query": "job board",
+  "consumer_profile": null,
+  "recommended": [
+    {
+      "record": {
+        "id": "usajobs",
+        "name": "USAJOBS",
+        "description": "US federal government jobs API.",
+        "category": "jobs",
+        "tags": [
+          "jobs",
+          "government"
+        ],
+        "homepage": "https://developer.usajobs.gov",
+        "docsUrl": "https://developer.usajobs.gov/API-Reference",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "dashboard"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://developer.usajobs.gov/API-Reference",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://developer.usajobs.gov/API-Reference",
+            "title": "USAJOBS documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://developer.usajobs.gov/API-Reference"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://developer.usajobs.gov/API-Reference"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://developer.usajobs.gov/API-Reference"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://developer.usajobs.gov/API-Reference"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://developer.usajobs.gov/API-Reference"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 165,
+      "matched_fields": [
+        "name",
+        "description",
+        "tags"
+      ],
+      "matched_terms": [
+        "job"
+      ],
+      "warnings": []
+    },
+    {
+      "record": {
+        "id": "adzuna",
+        "name": "Adzuna",
+        "description": "Job search API for job listings and labor market data.",
+        "category": "jobs",
+        "tags": [
+          "jobs",
+          "search"
+        ],
+        "homepage": "https://developer.adzuna.com",
+        "docsUrl": "https://developer.adzuna.com/docs",
+        "auth": "apiKey",
+        "cors": "yes",
+        "pricing": "free_tier",
+        "status": "trusted",
+        "fit": {
+          "frontend": 8,
+          "backend": 9,
+          "prototype": 9,
+          "production": 8,
+          "mobile": 8,
+          "dashboard": 8,
+          "automation": 8
+        },
+        "consumerProfiles": [
+          "backend-required",
+          "automation",
+          "dashboard"
+        ],
+        "source": {
+          "name": "curated-seed",
+          "url": "https://developer.adzuna.com/docs",
+          "importedAt": "2026-05-13"
+        },
+        "evidence": [
+          {
+            "url": "https://developer.adzuna.com/docs",
+            "title": "Adzuna documentation",
+            "checkedAt": "2026-05-13",
+            "excerpt": "Official API documentation or developer reference confirms public API details."
+          }
+        ],
+        "confidence": [
+          {
+            "field": "homepage",
+            "confidence": 9,
+            "source": "https://developer.adzuna.com/docs"
+          },
+          {
+            "field": "docsUrl",
+            "confidence": 9,
+            "source": "https://developer.adzuna.com/docs"
+          },
+          {
+            "field": "auth",
+            "confidence": 8,
+            "source": "https://developer.adzuna.com/docs"
+          },
+          {
+            "field": "cors",
+            "confidence": 7,
+            "source": "https://developer.adzuna.com/docs"
+          },
+          {
+            "field": "pricing",
+            "confidence": 7,
+            "source": "https://developer.adzuna.com/docs"
+          }
+        ],
+        "updatedAt": "2026-05-13",
+        "createdAt": "2026-05-13"
+      },
+      "score": 130,
+      "matched_fields": [
+        "description",
+        "tags"
+      ],
+      "matched_terms": [
+        "job"
+      ],
+      "warnings": []
+    }
+  ],
+  "alternatives": [],
+  "rejected": [],
+  "warnings": [],
+  "registry_health": {
+    "schema_version": "api-registry",
+    "last_imported_at": "2026-05-13",
+    "last_audited_at": "2026-05-13",
+    "freshness_days": 90,
+    "health": "ok",
+    "health_score": 8.7
+  },
+  "contract": {
+    "type": "object",
+    "required": [
+      "records",
+      "exportedAt"
+    ],
+    "properties": {
+      "records": "ApiRecord[]",
+      "exportedAt": "string"
+    }
+  },
+  "exportedAt": "2026-05-13T00:00:00.000Z"
+}
