@@ -52,11 +52,12 @@ export interface ApiRecord {
 }
 
 export interface RegistryManifest {
-  version: string;
-  generatedAt: string;
-  recordCount: number;
-  categories: string[];
-  sourceCatalog: string;
+  schema_version: string;
+  last_imported_at: string;
+  last_audited_at: string;
+  freshness_days: number;
+  health: string;
+  health_score: number;
 }
 
 export interface SourceCatalog {

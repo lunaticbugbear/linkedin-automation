@@ -255,7 +255,7 @@ describe('bootstrap', () => {
         category: 'entertainment',
         tags: ['test'],
         homepage: 'https://example.com',
-        auth: 'invalid-auth' as any,
+        auth: 'invalid-auth' as const,
         cors: 'yes' as const,
         pricing: 'free' as const,
         status: 'trusted' as const,
