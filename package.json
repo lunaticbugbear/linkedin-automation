@@ -1,0 +1,20 @@
+{
+  "name": "api-registry",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "registry": "tsx src/api-registry/cli.ts",
+    "demo": "tsx src/api-registry/cli.ts demo",
+    "release:check": "npm test && npm run typecheck && npm run registry -- audit && npm run demo"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
