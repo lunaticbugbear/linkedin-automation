@@ -116,6 +116,16 @@ async function cmdExport(args: string[], flags: Record<string, string>, cwd: str
   return exportShortlist({ query, format }, records, aliases, manifest, contracts);
 }
 
+async function cmdDemo(cwd: string): Promise<string> {
+  const searchOutput = await cmdSearch(['anime app'], { profile: 'frontend-only' }, cwd);
+  const exportOutput = await cmdExport(['weather dashboard'], { format: 'json' }, cwd);
+  return `$ npm run registry -- search "anime app" --profile frontend-only
+${searchOutput}
+
+$ npm run registry -- export "weather dashboard" --format json
+${exportOutput}`;
+}
+
 export async function runCli(argv: string[], cwd = process.cwd()): Promise<string> {
   const { command, args, flags } = parseArgs(argv);
   switch (command) {
@@ -125,7 +135,8 @@ export async function runCli(argv: string[], cwd = process.cwd()): Promise<strin
     case 'refresh': return cmdRefresh(cwd);
     case 'audit': return cmdAudit(cwd);
     case 'export': return cmdExport(args, flags, cwd);
-    default: throw new Error(`Unknown command: ${command}. Available: add, search, import, refresh, audit, export`);
+    case 'demo': return cmdDemo(cwd);
+    default: throw new Error(`Unknown command: ${command}. Available: add, search, import, refresh, audit, export, demo`);
   }
 }
 

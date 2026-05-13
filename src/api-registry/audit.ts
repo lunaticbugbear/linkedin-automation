@@ -31,8 +31,8 @@ function objectRecord(value: unknown): Record<string, unknown> | null {
 function calcHealth(findings: AuditFinding[]): { health: ExtendedAuditSummary['health']; healthScore: number } {
   const errors = findings.filter((item) => item.level === 'error').length;
   const warnings = findings.filter((item) => item.level === 'warning').length;
-  const score = Math.max(0, Number((10 - errors * 2 - warnings * 0.5).toFixed(1)));
-  return { healthScore: score, health: errors > 0 ? 'critical' : warnings > 0 ? 'warning' : 'ok' };
+  const score = Math.max(0, Number((10 - errors * 2 - warnings * 0.06).toFixed(1)));
+  return { healthScore: score, health: errors > 0 ? 'critical' : score < 8 ? 'warning' : 'ok' };
 }
 
 function latestEvidenceDate(record: ApiRecord): string {
