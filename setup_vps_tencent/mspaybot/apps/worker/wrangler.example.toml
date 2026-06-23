@@ -1,0 +1,28 @@
+name = "telebotsb-worker"
+main = "src/index.js"
+compatibility_date = "2026-03-15"
+account_id = "YOUR_ACCOUNT_ID"
+
+[observability.logs]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "telebotsb"
+database_id = "YOUR_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "YOUR_BUCKET_NAME"
+
+[vars]
+APP_ENV = "production"
+APP_TIMEZONE = "Asia/Jakarta"
+API_BASE_URL = "https://worker.example.com"
+ADMIN_APP_ORIGIN = "https://panel.example.com"
+MINIAPP_ORIGIN = "https://miniapp.example.com"
+TELEGRAM_SUPPORT_URL = "https://t.me/your_support"
+R2_PUBLIC_BASE_URL = "https://assets.example.com"
+
+[triggers]
+crons = ["*/1 * * * *"]

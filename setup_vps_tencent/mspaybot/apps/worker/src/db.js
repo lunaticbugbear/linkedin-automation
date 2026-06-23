@@ -178,6 +178,24 @@ export function createDb(env) {
       return results || [];
     },
 
+    // Semua produk (termasuk nonaktif) buat admin manager. Pakai p.*, jadi emoji auto ke-load.
+    async getAllProductsAdmin(limit = 50) {
+      const lim = Math.max(1, Math.min(Number(limit) || 50, 200));
+      const sql = `
+        SELECT p.*, CASE
+          WHEN p.is_unlimited_stock = 1 THEN 999999
+          ELSE (
+            SELECT COUNT(*) FROM stock_items s
+            WHERE s.product_id = p.id AND s.is_sold = 0
+          )
+        END AS stock_count
+        FROM products p
+        ORDER BY p.is_active DESC, p.id ASC
+        LIMIT ?1`;
+      const { results } = await db.prepare(sql).bind(lim).all();
+      return results || [];
+    },
+
     async getProductsByPopular(limit = 100) {
       // Sort by jumlah penjualan (order paid/delivered) desc, lalu id asc.
       const lim = Math.max(1, Math.min(Number(limit) || 100, 500));
@@ -237,17 +255,18 @@ export function createDb(env) {
       return row || null;
     },
 
-    async addProduct({ name, description, price, category, product_image_url = null, is_unlimited_stock = 0, digital_file_pointer = null, delivery_note = null, terms_url = null }) {
+    async addProduct({ name, description, price, category, emoji = null, product_image_url = null, is_unlimited_stock = 0, digital_file_pointer = null, delivery_note = null, terms_url = null }) {
       const result = await db
         .prepare(
-          `INSERT INTO products (name, description, price, category, product_image_url, is_unlimited_stock, digital_file_pointer, delivery_note, terms_url, is_active, created_at, updated_at)
-           VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 1, ?10, ?10)`
+          `INSERT INTO products (name, description, price, category, emoji, product_image_url, is_unlimited_stock, digital_file_pointer, delivery_note, terms_url, is_active, created_at, updated_at)
+           VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, 1, ?11, ?11)`
         )
         .bind(
           name,
           description || '',
           price,
           category || 'Umum',
+          emoji || null,
           product_image_url,
           is_unlimited_stock ? 1 : 0,
           is_unlimited_stock ? (digital_file_pointer || null) : null,
@@ -259,42 +278,29 @@ export function createDb(env) {
       return result.meta.last_row_id;
     },
 
-    // Import produk supplier ke katalog buyer (dengan markup + link supplier).
-    async addSupplierProductToCatalog({ name, description, price, category, supplier_id, supplier_external_id }) {
-      const result = await db
-        .prepare(`INSERT INTO products (name, description, price, category, is_unlimited_stock, is_active, supplier_id, supplier_external_id, created_at, updated_at)
-           VALUES (?1, ?2, ?3, ?4, 1, 1, ?5, ?6, ?7, ?7)`)
-        .bind(name, description || '', price, category || 'Aggregator', supplier_id, supplier_external_id, nowIso())
-        .run();
-      return result.meta.last_row_id;
+    async updateProductEmoji(productId, emoji) {
+      await db.prepare("UPDATE products SET emoji = ?2, updated_at = datetime('now') WHERE id = ?1")
+        .bind(productId, emoji || null).run();
     },
 
-    // Cek produk katalog yg udah ke-link ke supplier_external_id tertentu (anti-duplikat).
-    async findCatalogBySupplierExt(supplierId, extId) {
-      return await db.prepare('SELECT * FROM products WHERE supplier_id = ?1 AND supplier_external_id = ?2 LIMIT 1')
-        .bind(supplierId, extId).first();
-    },
-
-    // Update harga produk katalog yg udah ter-link supplier (buat re-import termurah).
-    async updateCatalogPrice(productId, price) {
+    async updateProductPrice(productId, price) {
       await db.prepare("UPDATE products SET price = ?2, updated_at = datetime('now') WHERE id = ?1")
-        .bind(productId, price).run();
+        .bind(productId, Math.round(Number(price) || 0)).run();
+    },
+
+    async updateProductDescription(productId, description) {
+      await db.prepare("UPDATE products SET description = ?2, updated_at = datetime('now') WHERE id = ?1")
+        .bind(productId, description || '').run();
+    },
+
+    async setProductActive(productId, active) {
+      await db.prepare("UPDATE products SET is_active = ?2, updated_at = datetime('now') WHERE id = ?1")
+        .bind(productId, active ? 1 : 0).run();
     },
 
     async updateProductName(productId, name) {
       await db.prepare("UPDATE products SET name = ?2, updated_at = datetime('now') WHERE id = ?1")
         .bind(productId, name).run();
-    },
-
-    // Cari produk katalog by judul (buat filtering termurah lintas-supplier).
-    async findCatalogByTitle(title) {
-      return await db.prepare('SELECT * FROM products WHERE name = ?1 LIMIT 1').bind(title).first();
-    },
-
-    // Re-link produk katalog ke supplier lain (yg lebih murah) + update harga.
-    async relinkCatalogProduct(productId, supplierId, extId, price) {
-      await db.prepare("UPDATE products SET supplier_id = ?2, supplier_external_id = ?3, price = ?4, updated_at = datetime('now') WHERE id = ?1")
-        .bind(productId, supplierId, extId, price).run();
     },
 
     async updateProduct(id, data) {
@@ -322,8 +328,12 @@ export function createDb(env) {
         .run();
     },
 
+    // Soft-delete: set is_active=0 agar hilang dari katalog buyer (getProducts filter is_active=1),
+    // tapi tetap muncul di admin manager (getAllProductsAdmin gak filter is_active). Riwayat order
+    // tetap utuh karena gak dihapus. Hard-delete (hapus fisik dari DB) gak dipakai: FK constraint
+    // dari orders mencegah DELETE, dan ada resiko yatim stock_items/orphan orders.
     async deleteProduct(id) {
-      await db.prepare('DELETE FROM products WHERE id = ?1').bind(id).run();
+      await db.prepare("UPDATE products SET is_active = 0, updated_at = datetime('now') WHERE id = ?1").bind(id).run();
     },
 
     async listStock(productId) {
@@ -934,78 +944,6 @@ export function createDb(env) {
         ORDER BY u.last_active DESC
         LIMIT ?1`;
       const { results } = await db.prepare(sql).bind(safeLimit).all();
-      return results || [];
-    },
-
-    // === SUPPLIER MANAGER (aggregator) ===
-    async getSuppliers() {
-      const { results } = await db.prepare('SELECT * FROM suppliers ORDER BY id ASC').all();
-      return results || [];
-    },
-
-    async getSupplierById(id) {
-      return await db.prepare('SELECT * FROM suppliers WHERE id = ?1').bind(id).first();
-    },
-
-    async createSupplier({ name, api_key, base_url }) {
-      const r = await db.prepare('INSERT INTO suppliers (name, api_key, base_url) VALUES (?1, ?2, ?3)')
-        .bind(name, api_key, base_url).run();
-      return r?.meta?.last_row_id;
-    },
-
-    async updateSupplier(id, { name, api_key, base_url, is_active }) {
-      await db.prepare("UPDATE suppliers SET name=?2, api_key=?3, base_url=?4, is_active=?5, updated_at=datetime('now') WHERE id=?1")
-        .bind(id, name, api_key, base_url, is_active ?? 1).run();
-    },
-
-    async deleteSupplier(id) {
-      await db.prepare('DELETE FROM supplier_products WHERE supplier_id=?1').bind(id).run();
-      await db.prepare('DELETE FROM suppliers WHERE id=?1').bind(id).run();
-    },
-
-    async upsertSupplierProduct(supplierId, extId, title, price, currency, desc, available) {
-      await db.prepare(`INSERT INTO supplier_products (supplier_id, external_id, title, price, currency, description, available, synced_at)
-        VALUES (?1,?2,?3,?4,?5,?6,?7, datetime('now'))
-        ON CONFLICT(supplier_id, external_id) DO UPDATE SET
-          title=excluded.title, price=excluded.price, currency=excluded.currency,
-          description=excluded.description, available=excluded.available, synced_at=datetime('now')`)
-        .bind(supplierId, extId, title, price, currency, desc, available ? 1 : 0).run();
-    },
-
-    async getSupplierProducts(supplierId) {
-      const { results } = await db.prepare('SELECT * FROM supplier_products WHERE supplier_id=?1').bind(supplierId).all();
-      return results || [];
-    },
-
-    async countSupplierProducts(supplierId) {
-      const row = await db.prepare('SELECT COUNT(*) AS n FROM supplier_products WHERE supplier_id=?1 AND available=1').bind(supplierId).first();
-      return Number(row?.n) || 0;
-    },
-
-    async updateSupplierSyncCount(id, count) {
-      await db.prepare("UPDATE suppliers SET products_count = ?2, last_sync_at = datetime('now') WHERE id = ?1")
-        .bind(id, count).run();
-    },
-
-    async setSupplierMarkup(id, percent) {
-      await db.prepare('UPDATE suppliers SET markup_percent = ?2 WHERE id = ?1').bind(id, percent).run();
-    },
-
-    async queueSupplierFulfillment(orderId, supplierId, extId, qty, status, reason) {
-      const r = await db.prepare(`INSERT INTO supplier_fulfillment_queue
-        (order_id, supplier_id, supplier_external_id, quantity, status, reason)
-        VALUES (?1,?2,?3,?4,?5,?6)`)
-        .bind(orderId, supplierId, extId, qty, status || 'queued', reason || null).run();
-      return r?.meta?.last_row_id;
-    },
-
-    async updateQueueStatus(queueId, status, reason) {
-      await db.prepare("UPDATE supplier_fulfillment_queue SET status=?2, reason=?3, updated_at=datetime('now') WHERE id=?1")
-        .bind(queueId, status, reason || null).run();
-    },
-
-    async getQueuedFulfillments() {
-      const { results } = await db.prepare("SELECT * FROM supplier_fulfillment_queue WHERE status='queued' ORDER BY id ASC").all();
       return results || [];
     },
 

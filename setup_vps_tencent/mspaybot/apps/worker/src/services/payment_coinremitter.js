@@ -200,8 +200,11 @@ export function isCoinRemitterPaid(payload) {
  */
 export function extractCoinRemitterReference(payload) {
   if (!payload) return null;
-  return pickFirst(payload, ['custom_data1', 'reference', 'invoice_id', 'id'])
-    || pickFirst(payload?.data || {}, ['custom_data1', 'reference', 'invoice_id', 'id']);
+  // Try invoice_id FIRST (matches orders.transaction_id), fall back to our custom_data1
+  // only if invoice_id is absent. Previous ordering had custom_data1 first which is our
+  // internal ref code, not the CoinRemitter invoice ID — so webhook auto-delivery never fired.
+  return pickFirst(payload, ['invoice_id', 'id', 'custom_data1', 'reference'])
+    || pickFirst(payload?.data || {}, ['invoice_id', 'id', 'custom_data1', 'reference']);
 }
 
 /**

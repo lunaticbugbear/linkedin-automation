@@ -278,10 +278,14 @@ function buildDeliveryMessage(orderId, stockItems, quantity, brand, product = nu
     }
   });
 
+  // Emoji produk (admin-set) atau auto dari nama/kategori biar deliver menu gak polos.
+  const em = (product && product.emoji && String(product.emoji).trim())
+    || (product ? productThemeEmoji(product.name, product.category) : '💎');
+
   const text = [
     t(lang, 'delivery_success_title'),
     '━━━━━━━━━━━━━━━━━━━━',
-    t(lang, 'delivery_order_processed', { code: orderCode }),
+    `${em} ${t(lang, 'delivery_order_processed', { code: orderCode })}`,
     '',
     ...sections,
     '',
@@ -628,12 +632,11 @@ async function buildCatalogCards(env, db, products, lang, intlMult, usdRate) {
     if (sc >= 3 && sc === maxSales) badge = ' 🥇';
     else if (showNew && p.created_at && new Date(p.created_at).getTime() > now7) badge = ' 🆕';
     // Nama produk TIDAK di-machine-translate (brand universal).
-    const themeEmoji = productThemeEmoji(p.name, p.category);
+    const themeEmoji = (p.emoji && String(p.emoji).trim()) || productThemeEmoji(p.name, p.category);
     text += '═════════════════════\n';
     text += `${themeEmoji} <b>【${idx}】 ${escapeHtml(p.name)}</b>${badge}\n`;
     text += '━━━━━━━━━━━━━━━━━━━━━\n';
-    text += `💵 <b>${formatMoney(localizedPrice(p.price, lang, intlMult), lang, usdRate)}</b>\n`;
-    text += `📦 ${stockStr}\n`;
+    text += `💵 <b>${formatMoney(localizedPrice(p.price, lang, intlMult), lang, usdRate)}</b>  ·  📦 ${stockStr}\n`;
     if (p.description) {
       const pDesc = await polishProductDesc(env, db, p.description, lang, p.name);
       if (pDesc) text += `📝 <i>${escapeHtml(pDesc)}</i>\n`;
@@ -769,51 +772,6 @@ async function deliverOrder(env, db, order) {
   const isUnlimitedDigital =
     product && Number(product.is_unlimited_stock) === 1 && product.digital_file_pointer;
 
-  // === SUPPLIER FORWARDING (aggregator) ===
-  // Kalau produk dari supplier, forward order ke supplier via API (bukan stok lokal).
-  if (product && product.supplier_id != null && product.supplier_id > 0) {
-    const supplier = await db.getSupplierById(product.supplier_id);
-    if (!supplier) {
-      await db.updateOrderStatus(order.id, 'failed');
-      const refunded = await db.refundOrderWallet(order.id).catch(() => 0);
-      if (refunded > 0) {
-        const flang = await getUserLang(db, order.user_id) || 'id';
-        await sendMessage(env, order.user_id, t(flang, 'refund_done', { code: orderCode, amount: formatIdr(refunded) }), { parse_mode: 'HTML' }).catch(() => {});
-      }
-      if (adminChatId) await sendMessage(env, adminChatId, `🚨 Supplier hilang untuk order ${orderCode}`);
-      return;
-    }
-    const buyRes = await buySupplierProduct(supplier, product.supplier_external_id, order.quantity);
-    if (buyRes.ok) {
-      // Ambil data akun dari response supplier (format bisa beda-beda).
-      const d = buyRes.data || {};
-      const delivered = d.data || d.account || d.product_data || d.delivered
-        || (Array.isArray(d.items) ? d.items.join('\n') : '')
-        || d.confirmation_reference || JSON.stringify(d).slice(0, 500);
-      await db.updateOrderStatus(order.id, 'paid');
-      await db.updateOrderStatus(order.id, 'delivered');
-      const lang0 = await getUserLang(db, order.user_id) || 'id';
-      await sendMessage(env, order.user_id, t(lang0, 'pay_success', { code: orderCode })).catch(() => {});
-      await sendMessage(env, order.user_id,
-        `📦 <b>${escapeHtml(order.product_name)}</b>\n━━━━━━━━━━━━━━━━━━\n<code>${escapeHtml(String(delivered))}</code>`,
-        { parse_mode: 'HTML' }).catch(() => {});
-      if (adminChatId) await sendMessage(env, adminChatId, `✅ Order ${orderCode} auto-fulfilled via ${escapeHtml(supplier.name)}`).catch(() => {});
-      return;
-    }
-    // Saldo kurang / gagal → queue + alert admin + pesan buyer.
-    await db.queueSupplierFulfillment(order.id, supplier.id, product.supplier_external_id, order.quantity, 'queued', buyRes.reason);
-    await db.updateOrderStatus(order.id, 'paid'); // buyer udah bayar
-    const lang1 = await getUserLang(db, order.user_id) || 'id';
-    await sendMessage(env, order.user_id,
-      t(lang1, 'order_queued'), { parse_mode: 'HTML' }).catch(() => {});
-    if (adminChatId) {
-      await sendMessage(env, adminChatId,
-        `⚠️ <b>Order ${orderCode} ANTRI</b>\nSupplier: ${escapeHtml(supplier.name)}\nAlasan: ${escapeHtml(buyRes.reason || 'saldo kurang')}\nProduk: ${escapeHtml(order.product_name)}\n\n💰 Topup saldo supplier lalu order auto-retry.`,
-        { parse_mode: 'HTML' }).catch(() => {});
-    }
-    return;
-  }
-
   let stock;
   if (isUnlimitedDigital) {
     // Bangun "virtual" stock items dari pointer produk sejumlah quantity yang dipesan.
@@ -934,14 +892,34 @@ async function processPendingOrders(env) {
       continue;
     }
 
+    // Violet has no status re-query API, so ONLY the webhook can confirm payment.
+    // Do NOT auto-expire a Violet/gateway order whose webhook may still arrive — a race
+    // with the 1-min cron would strand the buyer's paid money with no delivery and no
+    // automatic recovery. Only call refundOrderWallet when wallet_applied > 0 (wallet portion).
+    // Wallet_internal and CoinRemitter orders self-heal via isOrderPaid above.
+    const isGatewayOnly = !(await refundOrderWalletSafe(order));
     if (order.expires_at && Date.now() > new Date(order.expires_at).getTime()) {
-      await db.updateOrderStatus(order.id, 'expired');
-      await db.refundOrderWallet(order.id).catch(() => {}); // balikin saldo yang dipotong pas expired
-      const brand = await getBrandSettings(db);
-      const lang = await getUserLang(db, order.user_id) || 'id';
-      await sendMessage(env, order.user_id, t(lang, 'order_expired_msg', { code: formatOrderCodeWithBrand(order.id, brand.shortName) }));
+      if (!isGatewayOnly) {
+        await db.updateOrderStatus(order.id, 'expired');
+        await db.refundOrderWallet(order.id).catch(() => {});
+        const brand = await getBrandSettings(db);
+        const lang = await getUserLang(db, order.user_id) || 'id';
+        await sendMessage(env, order.user_id, t(lang, 'order_expired_msg', { code: formatOrderCodeWithBrand(order.id, brand.shortName) }));
+      } else {
+        // Gateway-only (Violet/QRIS with zero wallet_applied): don't silently expire.
+        // Leave pending so admin can manually confirm via 🟢 QRIS Pending. Webhook
+        // may still arrive. If truly unpaid, the admin can manually expire later.
+        console.log('[Scheduler] skipping expiry for gateway-only order', order.id, '(Violet webhook may still arrive)');
+      }
     }
   }
+}
+
+// Returns true if refundOrderWallet would actually credit money (>0 wallet_applied && !already_refunded).
+// A pure-gateway (Violet) order with wallet_applied=0 returns false — the refund is a no-op.
+async function refundOrderWalletSafe(order) {
+  const applied = Math.round(Number(order.wallet_applied) || 0);
+  return applied > 0 && !order.wallet_refunded;
 }
 
 async function syncSingleOrderIfPaid(env, db, order) {
@@ -962,8 +940,18 @@ async function syncSingleOrderIfPaid(env, db, order) {
 
   if (!paid) {
     if (order.expires_at && Date.now() > new Date(order.expires_at).getTime()) {
-      await db.updateOrderStatus(order.id, 'expired');
-      await db.refundOrderWallet(order.id).catch(() => {}); // balikin saldo yang dipotong pas expired
+      // Violet has no re-query API — only webhook can confirm. Don't expire gateway-only
+      // orders whose webhook may still arrive (mirroring processPendingOrders' guard).
+      const isGatewayOnly = !(await refundOrderWalletSafe(order));
+      if (!isGatewayOnly) {
+        await db.updateOrderStatus(order.id, 'expired');
+        await db.refundOrderWallet(order.id).catch(() => {});
+        const brand = await getBrandSettings(db);
+        const lang = await getUserLang(db, order.user_id) || 'id';
+        await sendMessage(env, order.user_id, t(lang, 'order_expired_msg', { code: formatOrderCodeWithBrand(order.id, brand.shortName) }));
+      } else {
+        console.log('[RealtimeSync] skipping expiry for gateway-only order', order.id, '(Violet webhook may still arrive)');
+      }
     }
     return;
   }
@@ -1133,7 +1121,7 @@ async function getReplyKeyboard(env, lang = 'id', db = null, userId = null) {
     keyboard: rows,
     resize_keyboard: true,
     is_persistent: true,
-    input_field_placeholder: '👇',
+    input_field_placeholder: t(lang, 'kb_placeholder'),
   };
 }
 
@@ -1183,9 +1171,8 @@ async function sendAdminMenu(env, db, chatId, options = {}) {
 
   const kb = [
     [{ text: '📊 Statistik', callback_data: 'admin:stats' }, { text: '📦 Order Terbaru', callback_data: 'admin:orders' }],
-    [{ text: '👥 User Terbaru', callback_data: 'admin:users' }, { text: '📡 Suppliers', callback_data: 'admin:suppliers' }],
-    [{ text: '✏️ Edit Nama Produk', callback_data: 'admin:editprod' }],
-    [{ text: '🟢 Konfirmasi QRIS Pending', callback_data: 'admin:violetpending' }],
+    [{ text: '🛍️ Kelola Produk', callback_data: 'admin:products' }],
+    [{ text: '👥 User Terbaru', callback_data: 'admin:users' }, { text: '🟢 QRIS Pending', callback_data: 'admin:violetpending' }],
   ];
   if (env.ADMIN_APP_ORIGIN) {
     kb.push([{ text: '🛍️ Kelola Produk (Web)', url: env.ADMIN_APP_ORIGIN }]);
@@ -1296,9 +1283,14 @@ app.post('/telegram/webhook', async (c) => {
   }
 
   const db = c.get('db');
+
+  // Wrapping the entire update handling in try/catch so any unexpected throw
+  // (malformed callback, DB error, whatever) returns 'ok' instead of 500.
+  // Telegram retries HTTP 500 updates repeatedly — idempotency (claim locks) means
+  // no double-deliver, but a thrown handler still stranding the response is avoidable.
+  try {
   const update = await c.req.json();
   const reqCache = {};
-
   if (update.message?.from) {
     const msg = update.message;
     const user = msg.from;
@@ -1360,51 +1352,116 @@ app.post('/telegram/webhook', async (c) => {
       });
       return c.text('ok');
     }
-    // Mode edit-nama-produk aktif? Pesan ini = nama baru (admin only).
-    const awaitEditProd = await db.getSetting(`await_editprod_${user.id}`, '');
-    const _editTs = Number(await db.getSetting(`await_editprod_ts_${user.id}`, '0'));
-    if (awaitEditProd && Date.now() - _editTs > 300000) {
-      await db.setSetting(`await_editprod_${user.id}`, '');
-      await db.setSetting(`await_editprod_ts_${user.id}`, '');
-    } else if (awaitEditProd && text && !text.startsWith('/') && !resolveMenuAction(text)) {
-      const adminId = await getAdminChatId(db, c.env);
-      if (adminId && Number(user.id) === adminId) {
-        await db.setSetting(`await_editprod_${user.id}`, '');
-        await db.setSetting(`await_editprod_ts_${user.id}`, '');
-        const prodId = Number(awaitEditProd);
-        const newName = text.slice(0, 200).trim();
-        await db.updateProductName(prodId, newName);
-        await sendMessage(c.env, msg.chat.id, `✅ Nama produk diganti jadi:\n<b>${escapeHtml(newName)}</b>`, { parse_mode: 'HTML' });
-        return c.text('ok');
-      }
-    }
-    // Mode add-supplier aktif? Pesan ini = data supplier (admin only).
-    const awaitSupplier = await db.getSetting(`await_supplier_${user.id}`, '');
-    const _supTs = Number(await db.getSetting(`await_supplier_ts_${user.id}`, '0'));
-    if (awaitSupplier === '1' && Date.now() - _supTs > 300000) {
-      await db.setSetting(`await_supplier_${user.id}`, '');
-      await db.setSetting(`await_supplier_ts_${user.id}`, '');
-    } else if (awaitSupplier === '1' && text && !text.startsWith('/') && text.includes('|')) {
-      const adminId = await getAdminChatId(db, c.env);
-      if (adminId && Number(user.id) === adminId) {
-        await db.setSetting(`await_supplier_${user.id}`, '');
-        await db.setSetting(`await_supplier_ts_${user.id}`, '');
-        const [nm, key, url] = text.split('|').map((x) => x.trim());
-        if (!nm || !key || !url) {
-          await sendMessage(c.env, msg.chat.id, '❌ Format salah. Pakai: <code>nama | api_key | base_url</code>', { parse_mode: 'HTML' });
+    // Mode tambah-produk aktif? Pesan ini = data produk baru (admin only).
+    {
+      const v = await db.getSetting(`await_addprod_${user.id}`, '');
+      const ts = Number(await db.getSetting(`await_addprod_ts_${user.id}`, '0'));
+      if (v && Date.now() - ts > 300000) {
+        await db.setSetting(`await_addprod_${user.id}`, '');
+        await db.setSetting(`await_addprod_ts_${user.id}`, '');
+      } else if (v && text && !text.startsWith('/') && !resolveMenuAction(text) && text.includes('|')) {
+        const adminId = await getAdminChatId(db, c.env);
+        if (adminId && Number(user.id) === adminId) {
+          await db.setSetting(`await_addprod_${user.id}`, '');
+          await db.setSetting(`await_addprod_ts_${user.id}`, '');
+          const [name, priceStr, cat, emoji] = text.split('|').map((x) => (x || '').trim());
+          const price = Math.round(Number(priceStr) || 0);
+          if (!name || price <= 0) {
+            await sendMessage(c.env, msg.chat.id, '❌ Format salah. Butuh minimal: <code>nama | harga</code>', { parse_mode: 'HTML' });
+            return c.text('ok');
+          }
+          const newId = await db.addProduct({ name: name.slice(0, 200), price, category: cat || 'Umum', emoji: emoji || null, description: '' });
+          await sendMessage(c.env, msg.chat.id,
+            `✅ Produk dibuat!\n🛍️ <b>${escapeHtml(name)}</b>\n💰 Rp ${formatIdr(price)}\n\nTap /admin → 🛍️ Kelola Produk → produk ini untuk atur stok & gambar.`,
+            { parse_mode: 'HTML' });
           return c.text('ok');
         }
-        // Duplicate check + auto-fetch.
-        const existing = await db.getSuppliers();
-        const dup = existing.find((s) => s.base_url === url || s.api_key === key);
-        let supId;
-        if (dup) { await db.updateSupplier(dup.id, { name: nm, api_key: key, base_url: url, is_active: 1 }); supId = dup.id; }
-        else { supId = await db.createSupplier({ name: nm, api_key: key, base_url: url }); }
-        await sendMessage(c.env, msg.chat.id, `⏳ Supplier <b>${escapeHtml(nm)}</b> ditambah. Fetching produk...`, { parse_mode: 'HTML' });
-        const sup = await db.getSupplierById(supId);
-        const synced = await syncSupplierCatalog(c.env, db, sup);
-        await sendMessage(c.env, msg.chat.id, `✅ <b>${escapeHtml(nm)}</b> ${dup ? 'diupdate' : 'ditambah'}!\n📦 ${synced} produk ter-sync (markup 25%).\n\nKetik /admin → 📡 Suppliers untuk kelola.`, { parse_mode: 'HTML' });
-        return c.text('ok');
+      }
+    }
+    // Mode edit field produk aktif? Pesan ini = nilai baru (name|price|desc). Format: <field>:<prodId>
+    {
+      const v = await db.getSetting(`await_pfield_${user.id}`, '');
+      const ts = Number(await db.getSetting(`await_pfield_ts_${user.id}`, '0'));
+      if (v && Date.now() - ts > 300000) {
+        await db.setSetting(`await_pfield_${user.id}`, '');
+        await db.setSetting(`await_pfield_ts_${user.id}`, '');
+      } else if (v && text && !text.startsWith('/') && !resolveMenuAction(text)) {
+        const adminId = await getAdminChatId(db, c.env);
+        if (adminId && Number(user.id) === adminId) {
+          const [field, prodIdStr] = v.split(':');
+          const prodId = Number(prodIdStr);
+          await db.setSetting(`await_pfield_${user.id}`, '');
+          await db.setSetting(`await_pfield_ts_${user.id}`, '');
+          const product = await db.getProductById(prodId);
+          if (!product) { await sendMessage(c.env, msg.chat.id, '❌ Produk tidak ditemukan.'); return c.text('ok'); }
+          if (field === 'name') {
+            const newName = text.slice(0, 200).trim();
+            await db.updateProductName(prodId, newName);
+            await sendMessage(c.env, msg.chat.id, `✅ Nama → <b>${escapeHtml(newName)}</b>`, { parse_mode: 'HTML' });
+          } else if (field === 'price') {
+            const price = Math.round(Number(text.replace(/[^\d]/g, '')) || 0);
+            if (price <= 0) { await sendMessage(c.env, msg.chat.id, '❌ Harga tidak valid.'); return c.text('ok'); }
+            await db.updateProductPrice(prodId, price);
+            await sendMessage(c.env, msg.chat.id, `✅ Harga → Rp ${formatIdr(price)}`);
+          } else if (field === 'desc') {
+            await db.updateProductDescription(prodId, text.slice(0, 1000).trim());
+            await sendMessage(c.env, msg.chat.id, `✅ Deskripsi diperbarui.`);
+          }
+          return c.text('ok');
+        }
+      }
+    }
+    // Mode atur-emoji aktif? Pesan ini = emoji baru atau "auto".
+    {
+      const v = await db.getSetting(`await_emoji_${user.id}`, '');
+      const ts = Number(await db.getSetting(`await_emoji_ts_${user.id}`, '0'));
+      if (v && Date.now() - ts > 300000) {
+        await db.setSetting(`await_emoji_${user.id}`, '');
+        await db.setSetting(`await_emoji_ts_${user.id}`, '');
+      } else if (v && text && !text.startsWith('/') && !resolveMenuAction(text)) {
+        const adminId = await getAdminChatId(db, c.env);
+        if (adminId && Number(user.id) === adminId) {
+          const prodId = Number(v);
+          await db.setSetting(`await_emoji_${user.id}`, '');
+          await db.setSetting(`await_emoji_ts_${user.id}`, '');
+          const trimmed = text.trim();
+          const emoji = trimmed.toLowerCase() === 'auto' ? null : trimmed.slice(0, 8);
+          await db.updateProductEmoji(prodId, emoji);
+          const p = await db.getProductById(prodId);
+          const shown = (p.emoji && String(p.emoji).trim()) || productThemeEmoji(p.name, p.category) + ' (auto)';
+          await sendMessage(c.env, msg.chat.id, `✅ Emoji ${escapeHtml(p.name)} → ${escapeHtml(emoji || '(auto)')}\nSekarang: ${shown}`);
+          return c.text('ok');
+        }
+      }
+    }
+    // Mode tambah-stok aktif? Pesan ini = 1+ baris kredensial (admin only).
+    {
+      const v = await db.getSetting(`await_addstock_${user.id}`, '');
+      const ts = Number(await db.getSetting(`await_addstock_ts_${user.id}`, '0'));
+      if (v && Date.now() - ts > 300000) {
+        await db.setSetting(`await_addstock_${user.id}`, '');
+        await db.setSetting(`await_addstock_ts_${user.id}`, '');
+      } else if (v && text && !text.startsWith('/') && !resolveMenuAction(text)) {
+        const adminId = await getAdminChatId(db, c.env);
+        if (adminId && Number(user.id) === adminId) {
+          const prodId = Number(v);
+          await db.setSetting(`await_addstock_${user.id}`, '');
+          await db.setSetting(`await_addstock_ts_${user.id}`, '');
+          const product = await db.getProductById(prodId);
+          if (!product) { await sendMessage(c.env, msg.chat.id, '❌ Produk tidak ditemukan.'); return c.text('ok'); }
+          if (Number(product.is_unlimited_stock) === 1) {
+            await sendMessage(c.env, msg.chat.id, `♾️ <b>${escapeHtml(product.name)}</b> adalah produk Unlimited (digital file).\nStok lokal gak dipakai — stok yang lo tambah ke sini gak bakal dikirim ke buyer.\nUpload file via web panel biar Unlimited-nya jalan bener.`, { parse_mode: 'HTML' });
+            return c.text('ok');
+          }
+          const items = text.split('\n').map((x) => x.trim()).filter(Boolean);
+          if (!items.length) { await sendMessage(c.env, msg.chat.id, '❌ Tidak ada baris terdeteksi.'); return c.text('ok'); }
+          await db.addStockItems(prodId, items.slice(0, 50));
+          const fresh = await db.getProductById(prodId);
+          await sendMessage(c.env, msg.chat.id,
+            `✅ ${items.length} stok ditambah ke <b>${escapeHtml(product.name)}</b>\n📦 Sisa stok sekarang: ${fresh.stock_count}`,
+            { parse_mode: 'HTML' });
+          return c.text('ok');
+        }
       }
     }
     // Mode search aktif? Pesan ini = keyword pencarian (kecuali command/menu).
@@ -1725,33 +1782,23 @@ app.post('/telegram/webhook', async (c) => {
           chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
           reply_markup: { inline_keyboard: [[{ text: '⬅️ Kembali', callback_data: 'admin:stats' }]] },
         }).catch(() => {});
-      } else if (data === 'admin:suppliers') {
-        const suppliers = await db.getSuppliers();
-        let txt = '📡 <b>Supplier Manager</b>\n━━━━━━━━━━━━━━━━━━\n';
+      } else if (data === 'admin:products') {
+        // Product manager: daftar semua produk (aktif+nonaktif) dgn stok & aksi cepat.
+        const prods = await db.getAllProductsAdmin(30);
+        let txt = '🛍️ <b>Kelola Produk</b>\n━━━━━━━━━━━━━━━━━━\n';
         const kb = [];
-        if (!suppliers.length) {
-          txt += '\nBelum ada supplier.\nTap ➕ Tambah Supplier untuk mulai.';
+        if (!prods.length) {
+          txt += '\nBelum ada produk. Tap ➕ Tambah Produk di bawah.';
         } else {
-          txt += `\n${suppliers.length} supplier terdaftar:\n`;
-          for (const s of suppliers) {
-            const icon = s.is_active ? '✅' : '⏸️';
-            txt += `\n${icon} <b>${escapeHtml(s.name)}</b> · ${s.products_count} produk`;
-            kb.push([{ text: `${icon} ${s.name}`.slice(0, 40), callback_data: `sup:view:${s.id}` }]);
+          txt += 'Tap produk untuk edit / atur stok / emoji.\n';
+          for (const p of prods) {
+            const st = Number(p.is_unlimited_stock) === 1 ? '♾️' : (Number(p.stock_count) > 0 ? `📦${p.stock_count}` : '🔴');
+            const act = Number(p.is_active) === 1 ? '✅' : '⏸️';
+            const em = (p.emoji && String(p.emoji).trim()) || productThemeEmoji(p.name, p.category);
+            kb.push([{ text: `${act}${em} ${p.name} · ${st} · Rp${formatIdr(p.price)}`.slice(0, 60), callback_data: `prod:${p.id}` }]);
           }
         }
-        kb.push([{ text: '➕ Tambah Supplier', callback_data: 'sup:add' }]);
-        kb.push([{ text: '⬅️ Kembali', callback_data: 'admin:stats' }]);
-        await telegramApi(c.env, 'editMessageText', {
-          chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
-          reply_markup: { inline_keyboard: kb },
-        }).catch(() => {});
-      } else if (data === 'admin:editprod') {
-        const prods = await db.getProducts();
-        let txt = '✏️ <b>Edit Nama Produk</b>\n━━━━━━━━━━━━━━━━━━\nPilih produk yang mau diganti namanya:';
-        const kb = prods.slice(0, 20).map((p) => [{
-          text: p.name.slice(0, 45),
-          callback_data: `editprod:${p.id}`,
-        }]);
+        kb.push([{ text: '➕ Tambah Produk', callback_data: 'prod:add' }]);
         kb.push([{ text: '⬅️ Kembali', callback_data: 'admin:stats' }]);
         await telegramApi(c.env, 'editMessageText', {
           chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
@@ -1807,7 +1854,19 @@ app.post('/telegram/webhook', async (c) => {
           }
         }
       }
-    } else if (data.startsWith('editprod:')) {
+    } else if (data === 'prod:add') {
+      const lang = await getUserLang(db, user.id) || 'id';
+      const adminId = await getAdminChatId(db, c.env);
+      if (!adminId || Number(user.id) !== adminId) {
+        await sendMessage(c.env, chatId, t(lang, 'err_access_denied'));
+      } else {
+        await db.setSetting(`await_addprod_${user.id}`, '1');
+        await db.setSetting(`await_addprod_ts_${user.id}`, String(Date.now()));
+        await sendMessage(c.env, chatId,
+          '➕ <b>Tambah Produk</b>\n━━━━━━━━━━━━━━━━━━\nKirim data produk dengan format:\n\n<code>nama | harga | kategori | emoji</code>\n\nContoh:\n<code>Netflix Premium 1 Bulan | 250000 | Streaming | 🎬</code>\n\n• Harga dalam Rupiah (angka).\n• Emoji opsional (kosongin → auto dari nama).\n• Stok & gambar diatur setelah produk dibuat.',
+          { parse_mode: 'HTML' });
+      }
+    } else if (data.startsWith('prod:')) {
       const lang = await getUserLang(db, user.id) || 'id';
       const adminId = await getAdminChatId(db, c.env);
       if (!adminId || Number(user.id) !== adminId) {
@@ -1818,101 +1877,95 @@ app.post('/telegram/webhook', async (c) => {
         if (!product) {
           await sendMessage(c.env, chatId, t(lang, 'err_product_not_found'));
         } else {
-          await db.setSetting(`await_editprod_${user.id}`, String(prodId));
-          await db.setSetting(`await_editprod_ts_${user.id}`, String(Date.now()));
-          await sendMessage(c.env, chatId,
-            `✏️ <b>Edit Nama Produk</b>\n━━━━━━━━━━━━━━━━━━\nNama sekarang:\n<b>${escapeHtml(product.name)}</b>\n\nKirim nama baru sebagai pesan teks:`,
-            { parse_mode: 'HTML' });
+          const isUnlim = Number(product.is_unlimited_stock) === 1;
+          const stockLabel = isUnlim ? '♾️ Unlimited' : `📦 ${product.stock_count} stok`;
+          const actLabel = Number(product.is_active) === 1 ? '⏸️ Nonaktifkan' : '▶️ Aktifkan';
+          const em = (product.emoji && String(product.emoji).trim()) || productThemeEmoji(product.name, product.category);
+          let txt = `🛍️ <b>${em} ${escapeHtml(product.name)}</b>\n━━━━━━━━━━━━━━━━━━\n`;
+          txt += `💰 Rp ${formatIdr(product.price)}\n`;
+          txt += `🏷️ ${escapeHtml(product.category || 'Umum')}\n`;
+          txt += `${stockLabel}\n`;
+          if (product.description) txt += `📝 ${escapeHtml(String(product.description).slice(0, 120))}\n`;
+          const kb = [
+            [{ text: '✏️ Nama', callback_data: `pf:name:${prodId}` }, { text: '💵 Harga', callback_data: `pf:price:${prodId}` }],
+            [{ text: '📝 Deskripsi', callback_data: `pf:desc:${prodId}` }, { text: '😀 Emoji', callback_data: `pf:emoji:${prodId}` }],
+            [{ text: '📦 Kelola Stok', callback_data: `pf:stock:${prodId}` }],
+            [{ text: actLabel, callback_data: `pf:toggle:${prodId}` }],
+            [{ text: '🗑️ Hapus Produk', callback_data: `pf:del:${prodId}` }],
+            [{ text: '⬅️ Kembali', callback_data: 'admin:products' }],
+          ];
+          await telegramApi(c.env, 'editMessageText', {
+            chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
+            reply_markup: { inline_keyboard: kb },
+          }).catch(() => {});
         }
       }
-    } else if (data.startsWith('sup:')) {
+    } else if (data.startsWith('pf:')) {
+      // Per-field edit + stock + toggle + delete. pf:<field>:<prodId>
       const lang = await getUserLang(db, user.id) || 'id';
       const adminId = await getAdminChatId(db, c.env);
       if (!adminId || Number(user.id) !== adminId) {
         await sendMessage(c.env, chatId, t(lang, 'err_access_denied'));
       } else {
-        const parts = data.split(':');
-        const action = parts[1];
-        const supId = Number(parts[2]);
-
-        if (action === 'add') {
-          await db.setSetting(`await_supplier_${user.id}`, '1');
-          await db.setSetting(`await_supplier_ts_${user.id}`, String(Date.now()));
-          await sendMessage(c.env, chatId,
-            '➕ <b>Tambah Supplier</b>\n━━━━━━━━━━━━━━━━━━\n\nKirim data supplier dengan format:\n<code>nama | api_key | base_url</code>\n\nContoh:\n<code>GPT Bot VN | shop_abc123 | https://bizmailer.org</code>\n\nProduk akan auto-fetch + markup 25% setelah ditambah.',
-            { parse_mode: 'HTML' });
-        } else if (action === 'view') {
-          const s = await db.getSupplierById(supId);
-          if (!s) { await sendMessage(c.env, chatId, '❌ Supplier tidak ditemukan.'); }
-          else {
-            const icon = s.is_active ? '✅ Aktif' : '⏸️ Nonaktif';
-            let txt = `📡 <b>${escapeHtml(s.name)}</b>\n━━━━━━━━━━━━━━━━━━\n`;
-            txt += `Status: ${icon}\n`;
-            txt += `🌐 ${escapeHtml(s.base_url)}\n`;
-            txt += `📦 Produk: ${s.products_count}\n`;
-            txt += `💹 Markup: ${s.markup_percent || 25}%\n`;
-            txt += `🔄 Last sync: ${s.last_sync_at || 'never'}`;
-            const kb = [
-              [{ text: '📦 Lihat Produk', callback_data: `sup:products:${supId}` }, { text: '🔄 Sync', callback_data: `sup:sync:${supId}` }],
-              [{ text: '📥 Import ke Katalog', callback_data: `sup:import:${supId}` }],
-              [{ text: '🗑️ Hapus', callback_data: `sup:remove:${supId}` }],
-              [{ text: '⬅️ Kembali', callback_data: 'admin:suppliers' }],
-            ];
-            await telegramApi(c.env, 'editMessageText', {
-              chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
-              reply_markup: { inline_keyboard: kb },
-            }).catch(() => {});
+        const [, field, prodIdStr] = data.split(':');
+        const prodId = Number(prodIdStr);
+        const product = await db.getProductById(prodId);
+        if (!product) {
+          await sendMessage(c.env, chatId, t(lang, 'err_product_not_found'));
+        } else if (field === 'toggle') {
+          await db.setProductActive(prodId, Number(product.is_active) !== 1);
+          const next = await db.getProductById(prodId);
+          await sendMessage(c.env, chatId, `${Number(next.is_active) === 1 ? '▶️ Aktif' : '⏸️ Nonaktif'}: ${escapeHtml(next.name)}`);
+        } else if (field === 'del') {
+          await db.deleteProduct(prodId);
+          await sendMessage(c.env, chatId, `✅ <b>${escapeHtml(product.name)}</b> disembunyikan dari katalog. Ketik /admin → 🛍️ Kelola Produk untuk lihat & aktifkan lagi.`, { parse_mode: 'HTML' });
+        } else if (field === 'stock') {
+          // Stok manager: tampilkan stok saat ini + aksi tambah/hapus.
+          let txt = `📦 <b>Kelola Stok: ${escapeHtml(product.name)}</b>\n━━━━━━━━━━━━━━━━━━\n`;
+          if (Number(product.is_unlimited_stock) === 1) {
+            txt += '\nProduk ini <b>Unlimited</b> (digital file). Stok lokal gak dipakai.\n';
+          } else {
+            const items = await db.listStock(prodId);
+            txt += `Sisa stok: <b>${product.stock_count}</b> (total ${items.length} item, ${items.filter((s) => Number(s.is_sold) === 0).length} available)\n`;
           }
-        } else if (action === 'products') {
-          const s = await db.getSupplierById(supId);
-          const markup = Number(s?.markup_percent) || 25;
-          const prods = await db.getSupplierProducts(supId);
-          let txt = `📦 <b>Produk ${escapeHtml(s?.name || '')}</b> (markup ${markup}%)\n━━━━━━━━━━━━━━━━━━\n`;
-          if (!prods.length) txt += '\nBelum ada produk. Tap Sync dulu.';
-          else {
-            for (const p of prods.slice(0, 15)) {
-              const sell = Math.round(Number(p.price) * (1 + markup / 100));
-              const av = p.available ? '✅' : '❌';
-              txt += `\n${av} ${escapeHtml(p.title.slice(0, 35))}\n   ${Number(p.price).toLocaleString()} → <b>${sell.toLocaleString()}</b> ${p.currency}`;
-            }
-            if (prods.length > 15) txt += `\n\n...dan ${prods.length - 15} produk lain`;
-          }
+          txt += '\nKirim 1 akun/kredensial per baris untuk nambah stok (atau beberapa baris sekaligus).';
+          await db.setSetting(`await_addstock_${user.id}`, String(prodId));
+          await db.setSetting(`await_addstock_ts_${user.id}`, String(Date.now()));
+          const kb = [
+            [{ text: '🔄 Toggle Unlimited/Finite', callback_data: `pf:toggleunlim:${prodId}` }],
+            [{ text: '⬅️ Kembali', callback_data: `prod:${prodId}` }],
+          ];
           await telegramApi(c.env, 'editMessageText', {
             chat_id: chatId, message_id: messageId, text: txt, parse_mode: 'HTML',
-            reply_markup: { inline_keyboard: [[{ text: '⬅️ Kembali', callback_data: `sup:view:${supId}` }]] },
+            reply_markup: { inline_keyboard: kb },
           }).catch(() => {});
-        } else if (action === 'sync') {
-          const s = await db.getSupplierById(supId);
-          const cnt = await syncSupplierCatalog(c.env, db, s);
-          await sendMessage(c.env, chatId, `🔄 Sync selesai: <b>${cnt}</b> produk dari ${escapeHtml(s.name)}.`, { parse_mode: 'HTML' });
-        } else if (action === 'import') {
-          const s = await db.getSupplierById(supId);
-          await sendMessage(c.env, chatId, `📥 Importing produk ${escapeHtml(s.name)} ke katalog...`, { parse_mode: 'HTML' });
-          const markup = Number(s.markup_percent) || 25;
-          const raw = await db.getSupplierProducts(supId);
-          const inStock = raw.filter((p) => p.available === 1);
-          let imported = 0; let updated = 0; let skipped = 0;
-          for (const p of inStock) {
-            const sellPrice = Math.round(Number(p.price) * (1 + markup / 100));
-            const existing = await db.findCatalogBySupplierExt(supId, p.external_id);
-            if (existing) { await db.updateCatalogPrice(existing.id, sellPrice); updated++; continue; }
-            const sameTitle = await db.findCatalogByTitle(p.title);
-            if (sameTitle && sameTitle.supplier_id) {
-              if (sellPrice >= Number(sameTitle.price)) { skipped++; continue; }
-              await db.relinkCatalogProduct(sameTitle.id, supId, p.external_id, sellPrice);
-              updated++; continue;
-            }
-            await db.addSupplierProductToCatalog({
-              name: await polishProductTitle(c.env, db, p.title), description: p.description, price: sellPrice,
-              category: 'Premium', supplier_id: supId, supplier_external_id: p.external_id,
-            });
-            imported++;
+        } else if (field === 'toggleunlim') {
+          const newUnlim = Number(product.is_unlimited_stock) !== 1;
+          if (newUnlim && !product.digital_file_pointer) {
+            await sendMessage(c.env, chatId, `❌ Gak bisa di-set Unlimited: produk ini belum punya digital_file_pointer.\nUpload file via web panel dulu (${c.env.ADMIN_APP_ORIGIN || 'admin panel'}), baru toggle Unlimited.`);
+          } else {
+            await db.updateProduct(prodId, { ...product, is_unlimited_stock: newUnlim });
+            await sendMessage(c.env, chatId, `${newUnlim ? '♾️ Unlimited' : '📦 Finite'}: ${escapeHtml(product.name)}${newUnlim ? '\nFile digital siap dikirim otomatis.' : '\nSekarang pakai stok lokal.'}`);
           }
-          await sendMessage(c.env, chatId, `✅ Import selesai!\n📥 Baru: <b>${imported}</b>\n🔄 Update: <b>${updated}</b>\n⏭️ Skip (lebih mahal): <b>${skipped}</b>\n\nProduk udah muncul di katalog buyer.`, { parse_mode: 'HTML' });
-        } else if (action === 'remove') {
-          const s = await db.getSupplierById(supId);
-          await db.deleteSupplier(supId);
-          await sendMessage(c.env, chatId, `🗑️ Supplier <b>${escapeHtml(s?.name || '')}</b> dihapus beserta produknya.`, { parse_mode: 'HTML' });
+        } else if (field === 'emoji') {
+          await db.setSetting(`await_emoji_${user.id}`, String(prodId));
+          await db.setSetting(`await_emoji_ts_${user.id}`, String(Date.now()));
+          await sendMessage(c.env, chatId,
+            `😀 <b>Atur Emoji: ${escapeHtml(product.name)}</b>\n━━━━━━━━━━━━━━━━━━\nEmoji sekarang: ${product.emoji || '(auto)'}\n\nKirim emoji baru (1 karakter) atau ketik <code>auto</code> untuk reset ke otomatis.`,
+            { parse_mode: 'HTML' });
+        } else {
+          // name | price | desc → set await, prompt for new value.
+          const labels = { name: 'Nama', price: 'Harga (Rupiah, angka)', desc: 'Deskripsi' };
+          if (!labels[field]) {
+            await sendMessage(c.env, chatId, '❌ Field tidak dikenal. Pilih dari menu produk.');
+          } else {
+            await db.setSetting(`await_pfield_${user.id}`, `${field}:${prodId}`);
+            await db.setSetting(`await_pfield_ts_${user.id}`, String(Date.now()));
+            const cur = field === 'name' ? product.name : (field === 'price' ? formatIdr(product.price) : (product.description || '(kosong)'));
+            await sendMessage(c.env, chatId,
+              `✏️ <b>${labels[field]} Produk</b>\n━━━━━━━━━━━━━━━━━━\nSekarang: <b>${escapeHtml(String(cur))}</b>\n\nKirim ${labels[field].toLowerCase()} baru sebagai teks:`,
+              { parse_mode: 'HTML' });
+          }
         }
       }
     } else if (data === 'my_orders') {
@@ -2245,6 +2298,10 @@ app.post('/telegram/webhook', async (c) => {
   }
 
   return c.text('ok');
+  } catch (err) {
+    console.error('[TelegramWebhook] uncaught:', err.message);
+    return c.text('ok');
+  }
 });
 
 app.post('/api/payment/webhook/violet', async (c) => {
@@ -2343,7 +2400,15 @@ app.post('/api/payment/webhook/coinremitter', async (c) => {
         || c.req.header('x-coinremitter-sign')
         || (payload && payload.sign) || '';
 
-      if (cr.apiKey && cr.password && providedSign) {
+      // Fail-closed: if credentials are configured but no signature is present,
+      // and the payload itself has no internal sign field, refuse.
+      const hasSigCheck = Boolean(cr.apiKey && cr.password && providedSign);
+      const hasNoVerification = !hasSigCheck && !(payload && payload.sign);
+      if (hasNoVerification) {
+        console.warn('[CoinRemitterWebhook] rejected: no signature and no internal sign');
+        return;
+      }
+      if (hasSigCheck) {
         const valid = await verifyCoinRemitterWebhook({
           rawBody, providedSign, apiKey: cr.apiKey, password: cr.password,
         });
@@ -2357,9 +2422,9 @@ app.post('/api/payment/webhook/coinremitter', async (c) => {
       if (!order || String(order.payment_provider || '').toLowerCase() !== 'coinremitter') return;
       if (order.status !== 'pending') return;
 
-      // Authoritative: re-query invoice status directly from CoinRemitter
-      // instead of trusting the webhook payload alone.
-      let paid = isCoinRemitterPaid(payload);
+      // Authoritative: re-query invoice status. On failure, refuse delivery rather
+      // than falling back to an unsigned/untrusted webhook payload. Cron self-heals.
+      let paid = false;
       try {
         const invId = payload.invoice_id || payload?.data?.invoice_id || String(transactionId);
         const status = await getCoinRemitterInvoiceStatus({
@@ -2367,7 +2432,8 @@ app.post('/api/payment/webhook/coinremitter', async (c) => {
         });
         paid = status.paid;
       } catch (e) {
-        console.warn('[CoinRemitterWebhook] status re-query failed, using payload:', e.message);
+        console.warn('[CoinRemitterWebhook] status re-query failed, refusing payload:', e.message);
+        return;
       }
       if (!paid) return;
 
@@ -3378,252 +3444,10 @@ app.get('/api/admin/users', requireAdmin, async (c) => {
   return jsonOk(c, users);
 });
 
-// === SUPPLIER MANAGER (aggregator) ===
-app.get('/api/admin/suppliers', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const suppliers = await db.getSuppliers();
-  return jsonOk(c, suppliers);
-});
-
-app.post('/api/admin/suppliers', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const { name, api_key, base_url } = await c.req.json();
-  if (!name || !api_key || !base_url) return jsonErr(c, 'name, api_key, base_url wajib', 422);
-  // Duplicate check: kalau base_url udah terdaftar → update (replace), bukan buat baru.
-  const existing = await db.getSuppliers();
-  const dup = existing.find((s) => s.base_url === base_url || s.api_key === api_key);
-  let supplierId;
-  let replaced = false;
-  if (dup) {
-    await db.updateSupplier(dup.id, { name, api_key, base_url, is_active: 1 });
-    supplierId = dup.id;
-    replaced = true;
-  } else {
-    supplierId = await db.createSupplier({ name, api_key, base_url });
-  }
-  // Auto-fetch katalog langsung setelah add/replace.
-  const sup = await db.getSupplierById(supplierId);
-  const synced = await syncSupplierCatalog(c.env, db, sup);
-  return jsonOk(c, { id: supplierId, name, base_url, replaced, synced });
-});
-
-app.put('/api/admin/suppliers/:id', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const id = Number(c.req.param('id'));
-  const { name, api_key, base_url, is_active } = await c.req.json();
-  await db.updateSupplier(id, { name, api_key, base_url, is_active });
-  return jsonOk(c, { message: 'Supplier updated' });
-});
-
-app.delete('/api/admin/suppliers/:id', requireAdmin, async (c) => {
-  const db = c.get('db');
-  await db.deleteSupplier(Number(c.req.param('id')));
-  return jsonOk(c, { message: 'Supplier deleted' });
-});
-
-app.post('/api/admin/suppliers/:id/sync', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const sup = await db.getSupplierById(Number(c.req.param('id')));
-  if (!sup) return jsonErr(c, 'Supplier not found', 404);
-  const count = await syncSupplierCatalog(c.env, db, sup);
-  return jsonOk(c, { synced: count });
-});
-
-// Set markup persen per supplier (20-30% recommended).
-app.post('/api/admin/suppliers/:id/markup', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const id = Number(c.req.param('id'));
-  const { markup_percent } = await c.req.json();
-  const pct = Math.max(0, Math.min(500, Number(markup_percent) || 25));
-  await db.setSupplierMarkup(id, pct);
-  return jsonOk(c, { id, markup_percent: pct });
-});
-
-// Lihat produk supplier dengan harga markup applied (preview reseller).
-app.get('/api/admin/suppliers/:id/products', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const id = Number(c.req.param('id'));
-  const sup = await db.getSupplierById(id);
-  if (!sup) return jsonErr(c, 'Supplier not found', 404);
-  const markup = Number(sup.markup_percent) || 25;
-  const raw = await db.getSupplierProducts(id);
-  const products = raw.map((p) => ({
-    external_id: p.external_id,
-    title: p.title,
-    base_price: p.price,
-    markup_percent: markup,
-    sell_price: Math.round(Number(p.price) * (1 + markup / 100)),
-    currency: p.currency,
-    available: p.available === 1,
-  }));
-  return jsonOk(c, { supplier: sup.name, markup_percent: markup, products });
-});
-
-// Import produk supplier ke katalog buyer + filtering termurah.
-app.post('/api/admin/suppliers/:id/import', requireAdmin, async (c) => {
-  const db = c.get('db');
-  const id = Number(c.req.param('id'));
-  const sup = await db.getSupplierById(id);
-  if (!sup) return jsonErr(c, 'Supplier not found', 404);
-  const markup = Number(sup.markup_percent) || 25;
-  const raw = await db.getSupplierProducts(id);
-  const inStock = raw.filter((p) => p.available === 1);
-
-  let imported = 0; let updated = 0; let skipped = 0;
-  for (const p of inStock) {
-    const sellPrice = Math.round(Number(p.price) * (1 + markup / 100));
-    const existing = await db.findCatalogBySupplierExt(id, p.external_id);
-    if (existing) {
-      await db.updateCatalogPrice(existing.id, sellPrice);
-      updated++;
-      continue;
-    }
-    // Filtering termurah: kalau judul sama udah ada dari supplier lain, ambil termurah.
-    const sameTitle = await db.findCatalogByTitle(p.title);
-    if (sameTitle && sameTitle.supplier_id) {
-      if (sellPrice >= Number(sameTitle.price)) { skipped++; continue; }
-      await db.relinkCatalogProduct(sameTitle.id, id, p.external_id, sellPrice);
-      updated++;
-      continue;
-    }
-    await db.addSupplierProductToCatalog({
-      name: await polishProductTitle(c.env, db, p.title), description: p.description, price: sellPrice,
-      category: 'Premium', supplier_id: id, supplier_external_id: p.external_id,
-    });
-    imported++;
-  }
-  return jsonOk(c, { imported, updated, skipped, total: inStock.length });
-});
-
-app.post('/api/admin/debug-fetch', requireAdmin, async (c) => {
-  const { base_url, api_key } = await c.req.json();
-  const out = {};
-  const cands = [
-    { u: base_url.replace(/\/+$/, '') + '/api/shop/products', h: { 'X-API-Key': api_key } },
-    { u: base_url.replace(/\/+$/, '') + '/api/v1/products', h: { Authorization: `Bearer ${api_key}` } },
-  ];
-  for (const cand of cands) {
-    try {
-      const res = await fetch(cand.u, { headers: cand.h, signal: AbortSignal.timeout(20000) });
-      const text = await res.text();
-      let count = 0;
-      try { count = (JSON.parse(text)?.products || []).length; } catch { /* noop */ }
-      out[cand.u] = { status: res.status, ok: res.ok, products: count, sample: text.slice(0, 120) };
-    } catch (e) {
-      out[cand.u] = { error: e.message };
-    }
-  }
-  return jsonOk(c, out);
-});
-
-
-
-async function syncAllSuppliers(env) {
-  const db = createDb(env);
-  const suppliers = await db.getSuppliers();
-  let total = 0;
-  for (const s of suppliers) {
-    if (s.is_active) {
-      total += await syncSupplierCatalog(env, db, s);
-    }
-  }
-  return total;
-}
-
-// Sync katalog dari satu supplier — tarik GET /api/v1/products dari base_url.
-async function syncSupplierCatalog(env, db, supplier) {
-  try {
-    const url = supplier.base_url.replace(/\/+$/, '') + '/api/v1/products';
-    const altUrl = supplier.base_url.replace(/\/+$/, '') + '/api/shop/products';
-
-    let res = await fetch(url, {
-      headers: { Authorization: `Bearer ${supplier.api_key}` },
-      signal: AbortSignal.timeout(25000),
-    });
-    if (!res.ok) {
-      // Fallback: coba custom endpoint dengan X-API-Key
-      res = await fetch(altUrl, {
-        headers: { 'X-API-Key': supplier.api_key },
-        signal: AbortSignal.timeout(25000),
-      });
-    }
-    if (!res.ok) {
-      console.warn(`[supplier] ${supplier.name}: HTTP ${res.status} (url: ${url}, alt: ${altUrl})`);
-      return 0;
-    }
-    const data = await res.json();
-    const products = data?.products || [];
-    if (!Array.isArray(products) || !products.length) {
-      console.warn(`[supplier] ${supplier.name}: empty/missing products array, keys:`, Object.keys(data || {}));
-      return 0;
-    }
-
-    let synced = 0;
-    for (const p of products) {
-      const title = String(p.title || p.name || '').trim();
-      if (!title || title === 'null' || title === 'undefined' || title === 'None') continue;
-      if (!p.id || p.price == null) continue;
-      await db.upsertSupplierProduct(
-        supplier.id,
-        String(p.id),
-        title,
-        Number(p.price),
-        String(p.currency || 'IDR').toUpperCase(),
-        String(p.description || '').slice(0, 1000),
-        p.available !== false,
-      );
-      synced++;
-    }
-    const count = await db.countSupplierProducts(supplier.id);
-    await db.updateSupplierSyncCount(supplier.id, count);
-    console.log(`[supplier] ${supplier.name}: ${count} products synced`);
-    return count;
-  } catch (e) {
-    console.warn(`[supplier] ${supplier.name} sync error:`, e.message);
-    return 0;
-  }
-}
-
-// Forward order ke supplier via POST /api/shop/buy. Return {ok, data, reason}.
-async function buySupplierProduct(supplier, externalId, qty) {
-  const base = supplier.base_url.replace(/\/+$/, '');
-  const candidates = [
-    { u: base + '/api/shop/buy', h: { 'X-API-Key': supplier.api_key, 'Content-Type': 'application/json' } },
-    { u: base + '/api/v1/orders', h: { Authorization: `Bearer ${supplier.api_key}`, 'Content-Type': 'application/json' } },
-  ];
-  for (const cand of candidates) {
-    try {
-      const res = await fetch(cand.u, {
-        method: 'POST',
-        headers: cand.h,
-        body: JSON.stringify({ product_id: externalId, quantity: qty }),
-        signal: AbortSignal.timeout(25000),
-      });
-      const text = await res.text();
-      let data = {};
-      try { data = JSON.parse(text); } catch { /* noop */ }
-      if (res.ok && (data.ok !== false)) {
-        return { ok: true, data };
-      }
-      // Saldo kurang / ditolak
-      return { ok: false, reason: data.error || data.message || `HTTP ${res.status}`, data };
-    } catch (e) {
-      // coba endpoint berikutnya
-      if (cand === candidates[candidates.length - 1]) {
-        return { ok: false, reason: e.message };
-      }
-    }
-  }
-  return { ok: false, reason: 'no endpoint worked' };
-}
-
-
 app.get('/api/shop/products', async (c) => {
   const db = c.get('db');
   const products = await db.getProducts();
-  // Buyer NEVER lihat jejak supplier — buang kolom linkage internal sebelum keluar publik.
-  const safe = products.map(({ supplier_id, supplier_external_id, ...rest }) => rest);
-  return jsonOk(c, safe);
+  return jsonOk(c, products);
 });
 
 // Endpoint publik untuk fetch branding di miniapp (tanpa auth) — supaya
@@ -3812,7 +3636,14 @@ app.post('/api/shop/orders/:id/cancel', requireShop, async (c) => {
     return jsonErr(c, `Order sudah ${order.status}, tidak bisa dibatalkan.`, 400);
   }
 
-  await db.updateOrderStatus(id, 'cancelled');
+  // Atomic cancel: hanya bisa cancel kalau masih pending. Concurrent delivery gak bisa
+  // ter-clobber jadi cancelled (cancelled != delivered), gak kayak updateOrderStatus unconditional.
+  const cancelled = await db.cancelOrderIfPending(id);
+  if (!cancelled) {
+    const fresh = await db.getOrderById(id);
+    return jsonErr(c, `Order sudah ${fresh?.status || 'diproses'}, tidak bisa dibatalkan.`, 409);
+  }
+  await db.refundOrderWallet(id).catch(() => {}); // balikin saldo pas cancel (idempoten)
   return jsonOk(c, { id, status: 'cancelled' });
 });
 
@@ -3892,7 +3723,6 @@ export default {
   async scheduled(controller, env, ctx) {
     ctx.waitUntil(processPendingOrders(env));
     ctx.waitUntil(updateUsdRate(env));
-    ctx.waitUntil(syncAllSuppliers(env));
     ctx.waitUntil(releaseStaleReservations(env));
   },
 };

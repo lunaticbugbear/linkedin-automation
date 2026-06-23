@@ -1,0 +1,40 @@
+name = "telebotsb-worker"
+main = "src/index.js"
+compatibility_date = "2026-03-15"
+
+# Ganti dengan Account ID Cloudflare Anda (dapatkan dari `npx wrangler whoami`)
+account_id = "f76f43df5bd8a43a793f6ecd7e5e7eaf"
+
+[observability.logs]
+enabled = true
+
+# D1 Database — ganti database_id setelah `npx wrangler d1 create telebotsb`
+[[d1_databases]]
+binding = "DB"
+database_name = "telebotsb"
+database_id = "2f124ff6-c1bc-4933-b85d-c52f2af07056"
+
+# R2 Bucket — ganti bucket_name setelah `npx wrangler r2 bucket create <name>`
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "telebotsb-assets"
+
+# Workers AI — untuk auto-translate nama/deskripsi produk (id→en/zh).
+# Free tier 10rb neuron/hari, hasil di-cache di DB biar hemat + instan.
+[ai]
+binding = "AI"
+
+# Worker variables — sesuaikan dengan domain Anda
+[vars]
+APP_ENV = "production"
+APP_TIMEZONE = "Asia/Jakarta"
+API_BASE_URL = "https://telebotsb-worker.telebotsb.workers.dev"
+ADMIN_APP_ORIGIN = "https://telebotsb-admin-482.pages.dev"
+MINIAPP_ORIGIN = "https://telebotsb-miniapp-1w0.pages.dev"
+R2_PUBLIC_BASE_URL = "https://pub-f76f43df5bd8a43a793f6ecd7e5e7eaf.r2.dev"
+TELEGRAM_SUPPORT_URL = "https://t.me/masantopay_bot"
+VIOLET_API_BASE_URL = "https://violetmediapay.com/api/live"
+
+# Cron trigger untuk cek expiry order pending tiap menit
+[triggers]
+crons = ["*/1 * * * *"]
